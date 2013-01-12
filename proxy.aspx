@@ -10,7 +10,7 @@ Dim Token As String = Session("Token") '"t-83bed305-e7d9-43ff-9aeb-96fb1fae2bc1"
 		req = "/api/rest/v1/home"
 	end if
 
-		try
+		'try
 	        Dim requrl As String = "https://api.sandbox.slcedu.org/" & req
 	        Dim client As New WebClient
 
@@ -18,13 +18,22 @@ Dim Token As String = Session("Token") '"t-83bed305-e7d9-43ff-9aeb-96fb1fae2bc1"
 	        client.Headers.Add("Authorization", "bearer " & Token)
 	        client.Headers.Add("Content-Type", "application/vnd.slc+json")
 	        client.Headers.Add("Accept", "application/vnd.slc+json")
-	        response.contenttype="application/json"
+	        
 	        Dim resp As String = client.DownloadString(requrl)
 	        resp = resp.replace("https://api.sandbox.slcedu.org/", "http://skd.local/proxy.aspx?p=/")
-	        response.write(resp)
+	        
 
-		catch ex as exception
-			response.write("invalid")
-		end try
+	        if request.querystring("format") = "xml" then
+		        Dim root As XmlDocument = JsonConvert.DeserializeXmlNode(resp, "slc")
+		        response.contenttype = "text/xml"
+		        response.write( root.OuterXML )
+	        else
+	        	response.contenttype="application/json"
+	        	response.write(resp)
+	        end if
+
+		'catch ex as exception
+		'	response.write("Error: " & ex.message)
+		'end try
 
 %>
