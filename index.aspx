@@ -49,19 +49,26 @@
               <div class="control-group">
                 <label class="control-label" for="inputRecipients">Recipients</label>
                 <div class="controls">
-                  <input class="span6" type="text" id="inputRecipients" placeholder="Email">
+                <div class="input-append span12">
+                    <input class="span8" type="text" id="inputRecipients" placeholder="Email">
+                    <button class="btn btn-primary" type="button">More</button>
+                </div>
+                  <br>
+                  <div class="span12" id="badges" style="margin-top: 8px">
+                    <span class="label label-success">Art 2 <i class="icon-pencil icon-white"></i> <i class="icon-trash icon-white"></i></span>
+                  </div>
                 </div>
               </div>
               <div class="control-group">
                 <label class="control-label" for="inputSubject">Subject</label>
                 <div class="controls">
-                  <input class="span6" type="text" id="inputSubject" placeholder="Subject">
+                  <input class="span8" type="text" id="inputSubject" placeholder="Subject">
                 </div>
               </div>
               <div class="control-group">
                 <label class="control-label" for="inputBody">Message Body</label>
                 <div class="controls">
-                  <textarea class="span6" name="inputBody" rows="3"></textarea>
+                  <textarea class="span8" name="inputBody" rows="3"></textarea>
                 </div>
               </div>
               <div class="control-group">
@@ -69,7 +76,7 @@
                   <label class="checkbox span4">
                     <input type="checkbox"> Send from my emails (john.doe@gmail.com)
                   </label>
-                  <button type="submit" style="display:block"class="btn btn-primary btn-large span2">Send</button>
+                  <button type="submit" style="display:block"class="btn btn-success btn-large span2">Send</button>
                 </div>
               </div>
             </form>
