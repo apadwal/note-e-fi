@@ -193,6 +193,22 @@
             $("#course-widget-body li").toggleClass("selected")
             $("#course-widget-body li i").toggleClass("icon-white")
         }
+
+        function Rand() {
+            $("#course-widget-body li").each(function() {
+                var blnToggle = true;
+                if ( Math.random() >= 0.5 ) {
+                    blnToggle = false;
+                }
+                if (blnToggle) {
+                    $(this).attr("class", "selected")
+                    $(this).find("i").attr("class", "icon-white")
+                } else {
+                    $(this).attr("class", "")
+                    $(this).find("i").attr("class", "")
+                }
+            });
+        }
     </script>
 
     <style>
@@ -350,18 +366,18 @@
         <div class="modal-header">
         
             <h3 id="myModalLabel">Student Filter</h3>
-            <select style="width: 100%">
+            <select style="width: 100%" id="filter" onchange="Rand()">
                 <option value=""></option>
                 <optgroup label="Course Data">
-                    <option value="Att">Absent Today</option>
-                    <option value="">Overall Attendance Percentage</option>
-                    <option value="">State Assessment Scores</option>
-                    <option value="">Benchmark Scores</option>
-                    <option value="">Course Grade</option>
+                    <option value="Absent Today">Absent Today</option>
+                    <option value="Overall Attendance Percentage">Overall Attendance Percentage</option>
+                    <option value="State Assessment Scores">State Assessment Scores</option>
+                    <option value="Benchmark Scores">Benchmark Scores</option>
+                    <option value="Course Grade">Course Grade</option>
                 </optgroup>
                 <optgroup label="My Groups">
-                    <option value="">Afterschool Intervention Group</option>
-                    <option value="">Reading Group</option>
+                    <option value="Afterschool Intervention Group">Afterschool Intervention Group</option>
+                    <option value="Reading Group">Reading Group</option>
                 </optgroup>
                 <optgroup label="School Groups">
                     <option value="">Bowling Team</option>

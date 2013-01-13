@@ -81,8 +81,11 @@ var courseWidget = (function () {
             } else {
                 $("#" + callerID).parent().attr("data-includeparents",  "0");
             }
+            $("#" + callerID).parent().attr("data-filter",  $("#filter").val() );
+
             $("#course-widget-container").modal("hide");
-            getStats()
+            getStats();
+
             return;
             var students = $(".course-student"),
                 ids = [],
