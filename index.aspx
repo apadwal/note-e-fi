@@ -2,6 +2,7 @@
 <head>
     <link rel="stylesheet" type="text/css" href="/css/bootstrap-wysihtml5.css"></link>
     <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="/css/crappydesign.css">
     <script src="/js/wysihtml5-0.3.0.min.js"></script>
     
     <script src="http://code.jquery.com/jquery-latest.js"></script>
@@ -182,11 +183,21 @@
     </style>
 </head>
 <body style="background:whiteSmoke">
-
-
-    <a href="/logout.aspx">Logout</a>
-
-    <div class="container-fluid">
+	<div class="navbar">
+			<div class="navbar-inner">
+				<a class="brand" href="#">NOTE-e-FI</a>
+				<ul class="nav">
+				  <li><a href="#">Home</a></li>
+				  <li><a href="#">Inbox</a></li>
+				  <li class="active"><a href="#">New Message</a></li> 
+				</ul>
+				<ul class="nav pull-right">
+					 <li><a href="#">Welcome, Linda!</a></li> 
+					 <li><a href="/logout.aspx">Logout</a></li>
+				</ul>
+			</div>
+	</div>
+    <div class="container-fluid">		
         <div class="row-fluid">
             <h3>Compose a Message</h3>
             <form class="form-horizontal span12">
@@ -240,7 +251,12 @@ Ms. Kim</textarea>
             </form>
         </div>
     </div>
-
+	<footer class="footer">
+	  <div class="container">
+		<p>Built by the CaseNEX team</p>
+		<p>Code licensed under <a href="http://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache License v2.0</a>.</p>
+	  </div>
+	</footer>
     <div id="course-widget-container" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
