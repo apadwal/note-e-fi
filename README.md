@@ -26,10 +26,15 @@ http://dev.slcedu.org/getting-started
 You will also need to set up a SQL Server 2008 Express database to save messages. After cloning the repo and opening the solution in Visual Studio, open the `create_database.sql` script in SQL Management Studio to create the database.  Once the database is created by running the script, you will need to connect it to IIS:
 
 1. In the object explorer of SQL Management Studio, go to the folder called "Security", then the folder called "Login" . Right click on this folder and click "New Login".
-![s](img/create-db1.png)
+![s](note-e-fi/blob/master/img/create-db1.png)
 2. Set the "Login name" to "IIS APPPOOL\ASP.NET 4.0" - Default database is "slccasenex" (do not click OK yet)
-![s](img/create-db2.png)
+![s](/note-e-fi/blob/master/img/create-db2.png)
 3. On the User Mapping tab, check the database "slccasenex", and check the role "db_owner"
-![s](img/create-db3.png)
+![s](/note-e-fi/blob/master/img/create-db3.png)
 4. Click OK. If you receive an error, ensure that you have IIS installed and it contains an application pool for ASP.NET 4.0.
 
+
+## Translation
+
+To get your own key to use the Microsoft Azure translation service, visit this URL:
+http://go.microsoft.com/?linkid=9782667
