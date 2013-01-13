@@ -4,6 +4,9 @@
     <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
     <script src="/js/wysihtml5-0.3.0.min.js"></script>
     <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/scripts/select2/select2.js"></script>
+    <link href="/scripts/select2/select2.css" rel="stylesheet"/>
 
     <script src="/js/bootstrap.min.js"></script>
     <script src="/js/bootstrap-wysihtml5.js"></script>
@@ -47,14 +50,45 @@
                         });
                 });
             }
+
+            $("#reciplist").select2({
+              minimumInputLength: 2,
+              multiple:true,
+              width:"resolve",
+              placeholder: "Search for Teacher, Parent, Student, or Class",
+              ajax: {
+                type: "POST",
+                url: "/Ajax/ajax.aspx",
+                dataType: 'json',
+                data: function (term, page) {
+                    return ('action=search&search=' + escape(term));
+                },
+                results: function (data, page) { ;
+                    return {results: data.results, more: false};
+                }
+              },
+              formatResult: recipFormatResults,
+              formatSelection: recipFormatSelection
+            });
         });
+        
+        function recipFormatResults(result) {
+            var markup = "<table class=''><tr>";
+            markup += "<td><div class='user-name'>" + result.name + "</div></td>";
+            markup += "<td><div class='user-email'>" + result.email + "</div></td>";
+            markup += "<td><div class='user-type'>" + result.type + "</div></td>";
+            markup += "</tr></table>";
+            return markup;              
+        }
+
+        function recipFormatSelection(result) {
+              $("#badges").append("<span class='label label-success'>" + result.name + "<i class='icon-pencil icon-white';></i> <i class='icon-trash icon-white'></i></span>");
+              return result.email;
+        }
     </script>
 </head>
 <body style="background:whiteSmoke">
     <%
-        If Session("Token") = "" then
-            response.redirect("/callback.aspx" )
-        end if
     %>
     <p>
 
@@ -71,8 +105,8 @@
               <div class="control-group">
                 <label class="control-label" for="inputRecipients">Recipients</label>
                 <div class="controls">
-                <div class="input-append span10">
-                    <input class="span12" type="text" id="inputRecipients" placeholder="Email">
+                <div class="span12">
+                    <input class="span6" type="hidden" id="reciplist" multiple="multiple" />
                     <button class="btn btn-primary" type="button" id="filters">More</button>
                 </div>
                   <br>
@@ -85,6 +119,7 @@
                 <label class="control-label" for="inputSubject">Subject</label>
                 <div class="controls">
                   <input class="span10" type="text" id="inputSubject" placeholder="Subject">
+                  <input class="span8" type="text" id="inputSubject" placeholder="Subject">
                 </div>
               </div>
               <div class="control-group">
