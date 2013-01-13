@@ -14,26 +14,38 @@
 
     <script type="text/javascript">
     var select2JSON = {"results":[],"more":false};
-        $(document).ready(function() {
+    function getStudents() {
+        var students = [];
+        /* populate data for select 2 */
+        $.getJSON('proxy.aspx?p=/api/rest/v1/sections/962f0a49fc8b8acd90be62aaa0a61c4e89083bbf_id/studentSectionAssociations/students', function(data) {
+                $.each(data, function(i) {
+                    students.push(data[i].id)
+                    select2JSON.results.push( {"id": data[i].id, "text": data[i].name.lastSurname + ", " + data[i].name.firstName, "name": data[i].name.lastSurname + ", " + data[i].name.firstName, "type": "Students" , "count":  1, "csv": data[i].id } )
+                });
+        });
 
-            /* populate data for select 2 */
-            $.getJSON('proxy.aspx?p=/api/rest/v1/sections/962f0a49fc8b8acd90be62aaa0a61c4e89083bbf_id/studentSectionAssociations/students', function(data) {
-                    $.each(data, function(i) {
-                        select2JSON.results.push( {"id": data[i].id, "text": data[i].name.lastSurname + ", " + data[i].name.firstName, "name": data[i].name.lastSurname + ", " + data[i].name.firstName, "type": "Students" , "count":  1 } )
-                    });
-            });
+        getTheRest(students) 
+    }
 
-            $.getJSON('proxy.aspx?p=/api/rest/v1/teachers/bac78264188155695c8a34f09189b6c637b465ad_id/teacherSectionAssociations/sections', function(data) {
-                    $.each(data, function(i) {
-                        select2JSON.results.push( {"id": "962f0a49fc8b8acd90be62aaa0a61c4e89083bbf_id", "text": data[i].uniqueSectionCode, "name": data[i].uniqueSectionCode, "type": "Courses" , "count":  27 } )
-                    });
-            });
+    function getTheRest(students) {
+       $.getJSON('proxy.aspx?p=/api/rest/v1/teachers/bac78264188155695c8a34f09189b6c637b465ad_id/teacherSectionAssociations/sections', function(data) {
+                $.each(data, function(i) {
+                    select2JSON.results.push( {"id": "962f0a49fc8b8acd90be62aaa0a61c4e89083bbf_id", "text": data[i].uniqueSectionCode, "name": data[i].uniqueSectionCode, "type": "Courses" , "count":  27, "csv": students.join(",") } )
+                });
+        });
 
-            $.getJSON('proxy.aspx?p=/api/rest/v1/teachers/', function(data) {
-                    $.each(data, function(i) {
-                        select2JSON.results.push( {"id": data[i].id, "text": data[i].name.personalTitlePrefix + ". " + data[i].name.lastSurname, "name": data[i].name.personalTitlePrefix + ". " + data[i].name.lastSurname, "type": "Teachers", "count":  1  } )
-                    });
-            });
+        $.getJSON('proxy.aspx?p=/api/rest/v1/teachers/', function(data) {
+                $.each(data, function(i) {
+                    select2JSON.results.push( {"id": data[i].id, "text": data[i].name.personalTitlePrefix + ". " + data[i].name.lastSurname, "name": data[i].name.personalTitlePrefix + ". " + data[i].name.lastSurname, "type": "Teachers", "count":  1, "csv": data[i].id  } )
+                });
+        });
+
+    }
+
+    $(document).ready(function() {
+
+
+        getStudents()
 
 
             $('i.icon-trash').live("click",function(){
@@ -41,15 +53,13 @@
             })
 
             $('i.icon-pencil').live("click",function(){
-                raiseModal($(this).parent().text());
-            })
-            $('button#filters').live("click",function(){
-                raiseModal();
+                var recipients = $(this).data("recipients");
+                alert($(this).closest('span').text())
+                raiseModal($(this).closest('span').text(), $(this).data("recipients"));
             })
 
-            function raiseModal(input) {
-                if (input) {$('#myModal .modal-header #myModalLabel').text("Editing " + input)}
-                    else {$('#myModal .modal-header #myModalLabel').text("Select Filters")}
+            function raiseModal(name, recips) {
+                $('#myModal .modal-header #myModalLabel').text("Editing " + name); 
                 $('#myModal').modal('show');
             }
 
@@ -90,11 +100,11 @@
           $(".select2-choice").html("<span style='color: #999999;!important'>Search for Teacher, Parent, Student, or Class</span>"); 
           var myId = result.id.replace(/[^\w\s]/gi, '');
             if (result.type == "Courses") {
-                $("#badges").append("<span class='label label-success'>" + result.name + " <i id='" + myId + "' data-type='" + result.type + "' data-id=" + result.id + " data-count='" + result.count + "' class=' icon-pencil icon-white' onClick='win.show('" + result.id + "');></i> <i class='icon-trash icon-white'></i></span> ");
+                $("#badges").append("<span data-type='" + result.type + "' data-id=" + result.id + " data-count='" + result.count + "' data-csv='" + result.csv + "' class='label label-success'>" + result.name + " <i id='" + myId + "'  class=' icon-pencil icon-white'></i> <i class='icon-trash icon-white'></i></span> ");
                 return result.email;            
             } else {
               if ($("#" + myId).length == 0) {
-                $("#badges").append("<span class='label label-success'>" + result.name + " <i id='" + myId + "' data-type='" + result.type + "' data-id=" + result.id + " class='icon-trash icon-white'></i></span> ");
+                $("#badges").append("<span data-csv='" + result.csv + "' data-type='" + result.type + "' data-id=" + result.id + " class='label label-success'>" + result.name + " <i id='" + myId + "'  class='icon-trash icon-white'></i></span> ");
                 return result.email;
               } else {
                 return result.email;
