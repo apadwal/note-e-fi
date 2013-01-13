@@ -459,7 +459,7 @@
                     <label class="checkbox span4" id="totalLang" style="padding-top: 6px;">
                   </label>
 
-                    <button type="submit" style=""class="btn">Save Template</button>
+                    <button type="submit" style=""class="btn" onclick="$('#datModal').modal('show')">Save Template</button>
                   <button onClick="sendFunction()" class="btn btn-success">Send <i class="icon-envelope icon-white"></i></button>  
                 </div>
               </div>
@@ -545,6 +545,14 @@
         </div>
         <div class="modal-footer">
             <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+        </div>
+    </div>
+    <div id="datModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="datModalLabel" aria-hidden="true">
+        <div class="modal-header">
+            <h3 id="datModalLabel">Template saved</h3>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-success" data-dismiss="modal" aria-hidden="true">Close</button>
         </div>
     </div>
 </body>
