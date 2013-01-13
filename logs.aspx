@@ -167,7 +167,7 @@ function randomStats() {
 				<ul class="nav">
 				  <li><a href="#">Home</a></li>
 				  <li><a href="#">Inbox</a></li>
-				  <li><a href="#">New Message</a></li>
+				  <li><a href="/">New Message</a></li>
                   <li class="active"><a href="#">Messaging Logs</a></li>
 				</ul>
 				<ul class="nav pull-right">

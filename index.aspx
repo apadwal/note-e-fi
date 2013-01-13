@@ -318,6 +318,7 @@
 				  <li><a href="#">Home</a></li>
 				  <li><a href="#">Inbox</a></li>
 				  <li class="active"><a href="#">New Message</a></li> 
+                  <li><a href="logs.aspx">Messaging Logs</a></li>
 				</ul>
 				<ul class="nav pull-right">
 					 <li class="loggedIn"><a href="#">Welcome, Linda!</a></li> 
