@@ -36,7 +36,7 @@
         csv = s.students.join(",")
        $.getJSON('proxy.aspx?p=/api/rest/v1/teachers/bac78264188155695c8a34f09189b6c637b465ad_id/teacherSectionAssociations/sections', function(data) {
                 $.each(data, function(i) {
-                    select2JSON.results.push( {"id": "962f0a49fc8b8acd90be62aaa0a61c4e89083bbf_id", "text": data[i].uniqueSectionCode, "name": data[i].uniqueSectionCode, "type": "Courses" , "count":  27, "csv": csv, "totalespanol": s.totalespanol } )
+                    select2JSON.results.push( {"id": "962f0a49fc8b8acd90be62aaa0a61c4e89083bbf_id", "text": data[i].uniqueSectionCode, "name": data[i].uniqueSectionCode, "type": "Courses" , "count":  27, "csv": csv, "totalespanol": 5 } )
                 });
         });
 
@@ -56,6 +56,8 @@
 
             $('i.icon-trash').live("click",function(){
                 $(this).closest('span').remove();
+                getStats();
+                showTranslationCounts();
             })
 
             $('i.icon-pencil').live("click",function(){
@@ -79,7 +81,8 @@
             });
 
             $("#reciplist").on("change", function(e) {
-              $(".select2-choice").html("<span style='color: #999999;!important'>Search for Teacher, Parent, Student, or Class</span>"); 
+              $(".select2-choice").html("<span style='color: #999999;!important'>Search for Teacher, Parent, Student, or Class</span>");
+              getStats(); 
             });
 
         });
@@ -99,7 +102,7 @@
                 $("#badges").append("<span data-espanol='" + result.totalespanol + "' data-type='" + result.type + "' data-id=" + result.id + " data-count='" + result.count + "' data-csv='" + result.csv + "' class='label label-success'>" + result.name + " <i id='" + myId + "'  class=' icon-pencil icon-white'></i> <i class='icon-trash icon-white'></i></span> ");
             } else {
               if ($("#" + myId).length == 0) {
-                $("#badges").append("<span data-espanol='" + result.totalespanol + "' data-csv='" + result.csv + "' data-csv='" + result.csv + "' data-type='" + result.type + "' data-id=" + result.id + " class='label label-success'>" + result.name + " <i id='" + myId + "'  class='icon-trash icon-white'></i></span> ");
+                $("#badges").append("<span data-espanol='" + result.totalespanol + "' data-count='" + result.count + "'  data-csv='" + result.csv + "' data-csv='" + result.csv + "' data-type='" + result.type + "' data-id=" + result.id + " class='label label-success'>" + result.name + " <i id='" + myId + "'  class='icon-trash icon-white'></i></span> ");
               }
             }
 
@@ -108,11 +111,31 @@
         }
 
 
+        function getStats() {
+            var students = 0;
+            var teachers = 0;
+            var parents = 0;
+            $('span.label').each(function(i,item) {
+                var type = $(this).data('type');
+                if (type == "Students" || type == "Courses") {
+                    students += $(this).data('count');
+                }
+                else if (type == "Teachers") {
+                    teachers += $(this).data('count');
+                }     
+            })
+            $('#stats').html('Sending To: <span class="badge badge-info">' + students + '</span> Students <span class="badge badge-info">' + teachers + '</span> Teachers <span class="badge badge-info">' + parents + '</span> Parents')
+        }
         function showTranslationCounts() {
             var totalEsp = 0; 
             $("#badges > span").each(function() {
                 totalEsp += parseInt($(this).attr("data-espanol"));
             })
+            if (totalEsp == 0) {
+                $("#totalLang").empty();
+                $("#totalLang").append("No Foreign Lang");
+                return;    
+            }
             var a = $("<a href='#'>Total Spanish: " + totalEsp + "</a>")
             $(a).bind("click", function () {
                 var txt = $("#mainarea").val()
@@ -129,7 +152,8 @@
                     }
                 })
             })
-            $("#totalLang").append(a)
+            $("#totalLang").empty();
+            $("#totalLang").append(a);
             
         }
 
@@ -170,6 +194,8 @@
                   <br>
                   <div class="span10" id="badges" style="margin-top: 8px">
                   </div>
+                  <div class="span10" id="stats" style="">
+                  </div>
                 </div>
               </div>
               <div class="control-group">
@@ -181,7 +207,14 @@
               <div class="control-group">
                 <label class="control-label" for="inputBody">Message Body</label>
                 <div class="controls">
-                  <textarea id="mainarea" class="span10" name="inputBody" rows="3">this is a test</textarea>
+                  <textarea id="mainarea" class="span10" name="inputBody" rows="9">Your child was absent today from math class today.  Regular attendance at school is an important part of every student's success and is necessary in order to gain the greatest benefit from the educational experience. Students who are frequently absent from school miss direct instruction and regular contact with their teachers. When absences accumulate, it may ultimately result in academic difficulty.
+
+We have the final exam next week so attendance is very important to be successful on the exam.  Please know that your child is responsible for the work covered today.
+
+If you have any questions, please call my office at or the guidance office at so that we may work together to ensure your child's educational success.
+
+Sincerely,
+Ms. Kim</textarea>
                 </div>
                 <script type="text/javascript">
                     $('#mainarea').wysihtml5({
@@ -196,7 +229,7 @@
                     
                   </label>
                   <label class="checkbox span4">
-                    <input type="checkbox"> Translate for non-English families
+                    <input type="checkbox" id="translate"> Translate for non-English families
                   </label>                  
                   <button type="submit" style="display:block"class="btn btn-success btn-large span2">Send</button>
                 </div>
@@ -218,7 +251,7 @@
     </div>
     <div id="tranlation" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-header">
-            <h3 id="myModalLabel">Translation</h3>
+            <h3 id="myModalLabel">Translation Preview</h3>
         </div>
         <div class="modal-body">
             <p>One fine body…</p>
