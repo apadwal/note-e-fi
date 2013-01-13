@@ -132,10 +132,8 @@
     <p>
 
     </p>
-    <p><%=Session("Token")%></p>
-    <a href="/logout.aspx">logout</a>
-    <a href="/proxy.aspx">Show proxy</a>
-    <button class="btn" data-url="/api/rest/v1/home" id="Start">Start Here</button>
+    <p style="display: none"><%=Session("Token")%></p>
+    <a href="/logout.aspx">Logout</a>
     <div id="foo"></div>
     <div class="container-fluid">
         <div class="row-fluid">
@@ -147,7 +145,6 @@
                     <input class="span10" type="hidden" id="reciplist" multiple="multiple" />
                   <br>
                   <div class="span10" id="badges" style="margin-top: 8px">
-                    <span class="label label-success">Art 2 <i class="icon-pencil icon-white"></i> <i class="icon-trash icon-white"></i></span>
                   </div>
                 </div>
               </div>
@@ -163,7 +160,10 @@
                   <textarea id="mainarea" class="span10" name="inputBody" rows="3"></textarea>
                 </div>
                 <script type="text/javascript">
-                    $('#mainarea').wysihtml5();
+                    $('#mainarea').wysihtml5({
+                        "link": false, //Button to insert a link. Default true
+                        "image": false, //Button to insert an image. Default true,
+                    });
                 </script>
               </div>
               <div class="control-group">
@@ -182,7 +182,6 @@
     </div>
     <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h3 id="myModalLabel">Modal header</h3>
         </div>
         <div class="modal-body">
