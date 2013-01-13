@@ -17,8 +17,6 @@
 	client.CachePolicy = New System.Net.Cache.RequestCachePolicy(System.Net.Cache.RequestCacheLevel.NoCacheNoStore)
 
 	'use the provided code to get the access_token
-	'response.write(requrl)
-	'response.end()
 	Dim resp As String = client.DownloadString(requrl)
 	Dim foo as Newtonsoft.Json.Linq.JObject = Newtonsoft.Json.Linq.JObject.Parse(resp)
 	Session("Token") = foo("access_token").toString()

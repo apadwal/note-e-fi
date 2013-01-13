@@ -1,3 +1,5 @@
+<%@ Page Language="VB" Explicit="False" %>
+<!-- #include virtual ="/CheckSessionToken.aspx" -->
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="/css/bootstrap-wysihtml5.css"></link>
@@ -10,17 +12,16 @@
     <script src="/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/scripts/select2/select2.js"></script>
     <link href="/scripts/select2/select2.css" rel="stylesheet"/>
-
     <script src="/js/bootstrap.min.js"></script>
     <script src="/js/bootstrap-wysihtml5.js"></script>
 
     <script type="text/javascript">
 
+    var select2JSON = {"results":[],"more":false}; //hold student data for the dropdowns
+    var list = {"course": []}; //list of students in the course-widget
 
-
-    var select2JSON = {"results":[],"more":false};
-    var list = {"course": []};
     function getStudents() {
+        //we are hardcodiing the course ID because only one course has students in the SLC
         var s = {"students":[],"totalespanol": 0};
         /* populate data for select 2 */
         $.getJSON('proxy.aspx?p=/api/rest/v1/sections/962f0a49fc8b8acd90be62aaa0a61c4e89083bbf_id/studentSectionAssociations/students', function(data) {
@@ -48,6 +49,7 @@
     }
 
     function getTheRest(s) {
+        //now load up classes and teachers in the school
         csv = s.students.join(",")
        $.getJSON('proxy.aspx?p=/api/rest/v1/teachers/bac78264188155695c8a34f09189b6c637b465ad_id/teacherSectionAssociations/sections', function(data) {
                 $.each(data, function(i) {
@@ -65,8 +67,10 @@
 
     $(document).ready(function() {
 
-
+            //populate
             getStudents()
+
+            //bind events
             $("#course-widget-body li").live("click", function() {
                 $(this).toggleClass("selected");
                 $(this).find("i").toggleClass("icon-white")
@@ -105,6 +109,7 @@
         });
         
         function recipFormatResults(result) {
+            //display the results
             var markup = "<table class=''><tr>";
             markup += "<td><div class='user-name'>" + result.name + "</div></td>";
             markup += "<td><div class='user-type'>" + result.type + "</div></td>";
@@ -113,6 +118,7 @@
         }
 
         function recipFormatSelection(result) {
+            //format the selected students
           $(".select2-choice").html("<span style='color: #999999;!important'>Search for Teacher, Parent, Student, or Class</span>"); 
           var myId = result.id.replace(/[^\w\s]/gi, '');
             if (result.type == "Courses") {
@@ -130,6 +136,11 @@
 
         function getStats() {
 
+            if ( $("#badges span").size() == 0 ) {
+                $("#stats").html("");
+                return;
+            }
+            //update the tally of the students selected to be emailed
             var students = 0;
             var teachers = 0;
             var parents = 0;
@@ -149,9 +160,11 @@
                 }     
             })
 
-            $('#stats').html('Sending To: <span class="badge badge-info">' + students + '</span> Students <span class="badge badge-info">' + teachers + '</span> Teachers <span class="badge badge-info">' + parents + '</span> Parents')
+            $('#stats').html('<span class="badge badge-info">' + students + '</span> Students <span class="badge badge-info">' + teachers + '</span> Teachers <span class="badge badge-info">' + parents + '</span> Parents')
         }
         function showTranslationCounts() {
+            //update the counts of non english students
+            //since the SLC dataset home lang attr is empty, we are faking it
             var totalEsp = 0; 
             $("#badges > span").each(function() {
                 totalEsp += parseInt($(this).attr("data-espanol"));
@@ -237,6 +250,7 @@
         }
 
         function Rand() {
+            //most data is missing, so lets randomize
             $("#course-widget-body li").each(function() {
                 var blnToggle = true;
                 if ( Math.random() >= 0.5 ) {
@@ -244,10 +258,10 @@
                 }
                 if (blnToggle) {
                     $(this).attr("class", "selected")
-                    $(this).find("i").attr("class", "icon-white")
+                    $(this).find("i").attr("class", "icon-user icon-white")
                 } else {
                     $(this).attr("class", "")
-                    $(this).find("i").attr("class", "")
+                    $(this).find("i").attr("class", "icon-user")
                 }
             });
         }
@@ -332,6 +346,17 @@
 
     #badges span {
         padding: 10px;
+        margin: 10px 10px 10px 0px;
+    }
+    #badges, #stats {
+        min-height: auto !important;
+    }
+    #mainarea-wysihtml5-toolbar a.btn {
+        height: 20px !important;
+    }
+
+    #stats span.badge {
+        margin-left: 10px
     }
     </style>
 </head>
@@ -343,6 +368,7 @@
 				  <li><a href="#">Home</a></li>
 				  <li><a href="#">Inbox</a></li>
 				  <li class="active"><a href="#">New Message</a></li> 
+                  <li><a href="logs.aspx">Messaging Logs</a></li>
 				</ul>
 				<ul class="nav pull-right">
 					 <li class="loggedIn"><a href="#">Welcome, Linda!</a></li> 
@@ -353,16 +379,23 @@
 	</div>
     <div class="container-fluid" id="overallContainer">		
         <div class="row-fluid">
-            <h3>Compose a Message</h3>
+            
             <form class="form-horizontal span12">
+            
+              <div class="control-group">
+                <label ></label>
+                <div class="controls">
+                  <h3>Compose a Message</h3>
+                </div>
+              </div>
               <div class="control-group">
                 <label class="control-label" for="inputRecipients">Recipients</label>
                 <div class="controls">
                     <input class="span10" type="hidden" id="reciplist" multiple="multiple" />
                   <br>
-                  <div class="span10" id="badges" style="padding: 10px 10px 10px 0px">
+                  <div class="span10" id="badges" style="margin-left: 0px; padding-top: 5px;">
                   </div>
-                  <div class="span10" id="stats" style="margin-left: 0px;">
+                  <div class="span10" id="stats" style="margin-left: -10px;">
                   </div>
                 </div>
               </div>
@@ -375,31 +408,36 @@
               <div class="control-group">
                 <label class="control-label" for="inputBody">Message Body</label>
                 <div class="controls">
-                    <textarea id="mainarea" class="span8" name="inputBody" rows="13" style="">Your child was absent today from math class today.  Regular attendance at school is an important part of every student's success and is necessary in order to gain the greatest benefit from the educational experience. Students who are frequently absent from school miss direct instruction and regular contact with their teachers. When absences accumulate, it may ultimately result in academic difficulty.<br><br>
+                    <textarea id="mainarea" class="span10" name="inputBody" rows="13" style="">
+                        Your child was absent today from math class today.  Regular attendance at school is an important part of every student's success and is necessary in order to gain the greatest benefit from the educational experience. Students who are frequently absent from school miss direct instruction and regular contact with their teachers. When absences accumulate, it may ultimately result in academic difficulty.<br><br>
 
-                    We have the final exam next week so attendance is very important to be successful on the exam.  Please know that your child is responsible for the work covered today.<br><br>
+                        We have the final exam next week so attendance is very important to be successful on the exam.  Please know that your child is responsible for the work covered today.<br><br>
 
-                    If you have any questions, please call my office at or the guidance office at so that we may work together to ensure your child's educational success.<br><br>
+                        If you have any questions, please call my office at or the guidance office at so that we may work together to ensure your child's educational success.<br><br>
 
-                    Sincerely,<br>
-                    Ms. Kim</textarea>
+                        Sincerely,<br>
+                        Ms. Kim
+                    </textarea>
                 </div>
                 <script type="text/javascript">
+                
                     $('#mainarea').wysihtml5({
                         "link": false, //Button to insert a link. Default true
-                        "image": false, //Button to insert an image. Default true,
+                        "image": false //Button to insert an image. Default true
                     });
+                
+                    
                 </script>
               </div>
               <div class="control-group">
                 <div class="controls">
-                  <label class="checkbox span4" id="totalLang">
+
+                  <label class="checkbox span4" class="showTrans"  >
+                    <input type="checkbox" id="translate"> Translate for non-English families
+                  </label>          
+                    <label class="checkbox span4" id="totalLang" style="padding-top: 6px;">
                     
                   </label>
-                  <label class="checkbox span4">
-                    <input type="checkbox" id="translate"> Translate for non-English families
-                  </label>                  
-                  
                 </div>
               </div>
             </form>
@@ -459,7 +497,7 @@
 
             <div style="width: 50%; float: left; text-align: left; ">
                 <label style="" title="Include Parent">
-                    <input type="checkbox" class="course-parent" data-send="false" id="doParent" /> 
+                    <input type="checkbox" class="course-parent" data-send="false" id="doParent" style="margin-top: -3px"/> 
                     Include Parent In Email
                 </label>
                 Select: 
