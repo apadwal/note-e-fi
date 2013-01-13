@@ -5,15 +5,15 @@
     <link rel="stylesheet" type="text/css" href="/css/bootstrap-wysihtml5.css"></link>
     <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="/css/crappydesign.css">
-    <script src="/js/wysihtml5-0.3.0.min.js"></script>
-    <script src="/js/base64.js"></script>
+    <script src="/scripts/wysihtml5-0.3.0.min.js"></script>
+    <script src="/scripts/base64.js"></script>
     <script src="http://code.jquery.com/jquery-latest.js"></script>
     <script src="/scripts/course-widget.js?r=1"></script>
-    <script src="/js/bootstrap.min.js"></script>
+    <script src="/scripts/bootstrap.min.js"></script>
     <script type="text/javascript" src="/scripts/select2/select2.js"></script>
     <link href="/scripts/select2/select2.css" rel="stylesheet"/>
-    <script src="/js/bootstrap.min.js"></script>
-    <script src="/js/bootstrap-wysihtml5.js"></script>
+    <script src="/scripts/bootstrap.min.js"></script>
+    <script src="/scripts/bootstrap-wysihtml5.js"></script>
 
     <script type="text/javascript">
 
@@ -104,7 +104,7 @@
                 $('#myModal').modal('show');
             }
 
-
+            $("#messageTemplate").select2();
             $("#reciplist").select2({
               width:"resolve",
               placeholder: "Search for Teacher, Parent, Student, or Class",
@@ -114,7 +114,7 @@
             });
 
             $("#reciplist").on("change", function(e) {
-              $(".select2-choice").html("<span style='color: #999999;!important'>Search for Teacher, Parent, Student, or Class</span>");
+              $("#s2id_reciplist .select2-choice").html("<span style='color: #999999;!important'>Search for Teacher, Parent, Student, or Class</span>");
               getStats(); 
             });
 
@@ -131,7 +131,7 @@
 
         function recipFormatSelection(result) {
             //format the selected students
-          $(".select2-choice").html("<span style='color: #999999;!important'>Search for Teacher, Parent, Student, or Class</span>"); 
+          $("#s2id_reciplist .select2-choice").html("<span style='color: #999999;!important'>Search for Teacher, Parent, Student, or Class</span>"); 
           var myId = result.id.replace(/[^\w\s]/gi, '');
             if (result.type == "Courses") {
                 $("#badges").append("<span data-espanol='" + result.totalespanol + "' data-type='" + result.type + "' data-id=" + result.id + " data-count='" + result.count + "' data-csv='" + result.csv + "' class='label label-success'>" + result.name + " <i id='" + myId + "'  class=' icon-pencil icon-white'></i> <i class='icon-trash icon-white'></i></span> ");
@@ -377,9 +377,7 @@
 			<div class="navbar-inner">
 				<a class="brand" href="#">NOTE-e-FI</a>
 				<ul class="nav">
-				  <li><a href="#">Home</a></li>
-				  <li><a href="#">Inbox</a></li>
-				  <li class="active"><a href="#">New Message</a></li> 
+				  <li class="active"><a href="/">New Message</a></li> 
                   <li><a href="logs.aspx">Messaging Logs</a></li>
 				</ul>
 				<ul class="nav pull-right">
@@ -461,7 +459,7 @@
                     <label class="checkbox span4" id="totalLang" style="padding-top: 6px;">
                   </label>
 
-                    <button type="submit" style=""class="btn">Save Template</button>
+                    <button type="submit" style=""class="btn" onclick="$('#datModal').modal('show')">Save Template</button>
                   <button onClick="sendFunction()" class="btn btn-success">Send <i class="icon-envelope icon-white"></i></button>  
                 </div>
               </div>
@@ -507,7 +505,7 @@
                 </optgroup>
             </select>
         </div>
-        <div id="course-widget-body" class="modal-body">
+        <div id="course-widget-body" class="modal-body" style="height:300px">
             <p>One fine body…</p>
         </div>
         <script id="course-widget-li" type="text/html">
@@ -547,6 +545,14 @@
         </div>
         <div class="modal-footer">
             <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+        </div>
+    </div>
+    <div id="datModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="datModalLabel" aria-hidden="true">
+        <div class="modal-header">
+            <h3 id="datModalLabel">Template saved</h3>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-success" data-dismiss="modal" aria-hidden="true">Close</button>
         </div>
     </div>
 </body>
