@@ -157,7 +157,7 @@
                 }     
             })
 
-            $('#stats').html('Sending To: <span class="badge badge-info">' + students + '</span> Students <span class="badge badge-info">' + teachers + '</span> Teachers <span class="badge badge-info">' + parents + '</span> Parents')
+            $('#stats').html('<span class="badge badge-info">' + students + '</span> Students <span class="badge badge-info">' + teachers + '</span> Teachers <span class="badge badge-info">' + parents + '</span> Parents')
         }
         function showTranslationCounts() {
             //update the counts of non english students
@@ -215,10 +215,10 @@
                 }
                 if (blnToggle) {
                     $(this).attr("class", "selected")
-                    $(this).find("i").attr("class", "icon-white")
+                    $(this).find("i").attr("class", "icon-user icon-white")
                 } else {
                     $(this).attr("class", "")
-                    $(this).find("i").attr("class", "")
+                    $(this).find("i").attr("class", "icon-user")
                 }
             });
         }
@@ -304,6 +304,10 @@
     #mainarea-wysihtml5-toolbar a.btn {
         height: 20px !important;
     }
+
+    #stats span.badge {
+        margin-left: 10px
+    }
     </style>
 </head>
 <body style="background:whiteSmoke">
@@ -324,16 +328,23 @@
 	</div>
     <div class="container-fluid" id="overallContainer">		
         <div class="row-fluid">
-            <h3>Compose a Message</h3>
+            
             <form class="form-horizontal span12">
+            
+              <div class="control-group">
+                <label ></label>
+                <div class="controls">
+                  <h3>Compose a Message</h3>
+                </div>
+              </div>
               <div class="control-group">
                 <label class="control-label" for="inputRecipients">Recipients</label>
                 <div class="controls">
                     <input class="span10" type="hidden" id="reciplist" multiple="multiple" />
                   <br>
-                  <div class="span10" id="badges" style="">
+                  <div class="span10" id="badges" style="margin-left: 0px; padding-top: 5px;">
                   </div>
-                  <div class="span10" id="stats" style="margin-left: 0px;">
+                  <div class="span10" id="stats" style="margin-left: -10px;">
                   </div>
                 </div>
               </div>
@@ -369,12 +380,13 @@
               </div>
               <div class="control-group">
                 <div class="controls">
-                  <label class="checkbox span4" id="totalLang">
+
+                  <label class="checkbox span4" class="showTrans"  >
+                    <input type="checkbox" id="translate"> Translate for non-English families
+                  </label>          
+                    <label class="checkbox span4" id="totalLang" style="padding-top: 6px;">
                     
                   </label>
-                  <label class="checkbox span4">
-                    <input type="checkbox" id="translate"> Translate for non-English families
-                  </label>                  
                   <button type="submit" style="display:block"class="btn btn-success btn-large span2">Send</button>
                 </div>
               </div>
@@ -434,7 +446,7 @@
 
             <div style="width: 50%; float: left; text-align: left; ">
                 <label style="" title="Include Parent">
-                    <input type="checkbox" class="course-parent" data-send="false" id="doParent" /> 
+                    <input type="checkbox" class="course-parent" data-send="false" id="doParent" style="margin-top: -3px"/> 
                     Include Parent In Email
                 </label>
                 Select: 
