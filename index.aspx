@@ -3,7 +3,7 @@
     <link rel="stylesheet" type="text/css" href="./css/bootstrap.min.css">
     <script src="http://code.jquery.com/jquery-latest.js"></script>
     <script src="/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="/scripts/select2/select2.min.js"></script>
+    <script type="text/javascript" src="/scripts/select2/select2.js"></script>
     <link href="/scripts/select2/select2.css" rel="stylesheet"/>
 
     <script type="text/javascript">
@@ -30,20 +30,37 @@
 
             $("#reciplist").select2({
               minimumInputLength: 2,
+              multiple:true,
               width:"resolve",
               placeholder: "Search for Teacher, Parent, Student, or Class",
+              ajax: {
+                type: "POST",
+                url: "/Ajax/ajax.aspx",
+                dataType: 'json',
+                data: function (term, page) {
+                    return ('action=search&search=' + escape(term));
+                },
+                results: function (data, page) { ;
+                    return {results: data.results, more: false};
+                }
+              },
+              formatResult: recipFormatResults,
               formatSelection: recipFormatSelection
             });
         });
         
         function recipFormatResults(result) {
-
-
+            var markup = "<table class=''><tr>";
+            markup += "<td><div class='user-name'>" + result.name + "</div></td>";
+            markup += "<td><div class='user-email'>" + result.email + "</div></td>";
+            markup += "<td><div class='user-type'>" + result.type + "</div></td>";
+            markup += "</tr></table>";
+            return markup;              
         }
 
         function recipFormatSelection(result) {
-              return result.id;
-              $("#badges").append("<span class='label label-success'>Art 2 <i class='icon-pencil icon-white;></i> <i class='icon-trash icon-white'></i></span>");
+              $("#badges").append("<span class='label label-success'>" + result.name + "<i class='icon-pencil icon-white';></i> <i class='icon-trash icon-white'></i></span>");
+              return result.email;
         }
     </script>
 </head>
@@ -66,10 +83,7 @@
                 <label class="control-label" for="inputRecipients">Recipients</label>
                 <div class="controls">
                 <div class="span12">
-                    <select class="span6" id="reciplist" multiple="multiple">
-                      <option>hi</option>
-                      <option>low</option>
-                    </select>
+                    <input class="span6" type="hidden" id="reciplist" multiple="multiple" />
                     <button class="btn btn-primary" type="button">More</button>
                 </div>
                   <br>
