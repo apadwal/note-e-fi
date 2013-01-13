@@ -43,10 +43,10 @@ var courseWidget = (function () {
                 dom = "<ol>";
                 if (e.length != 0) {
                     $(e).each(function () {
-                        var cls = ""
+                        var cls = "selected"
                         id = this.id;
                         if (jQuery.inArray(id, selectedStudents) > -1) {
-                            cls = "selected"
+                            cls = ""
                         }
                         fullName = this.name.lastSurname + ", " + this.name.firstName;
                         dom += li.replace("[id]", id).replace("[name]", fullName).replace("[class]", cls);
