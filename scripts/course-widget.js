@@ -3,15 +3,25 @@ var courseWidget = (function () {
     $.fn.courseWidget = function () {
         "use strict";
         var 
-        onLoad = function (sectionID, onSaveComplete) {
+        onLoad = function (sectionID, csv, caller, onSaveComplete ) {
+            selectedStudents = csv.split(",");
+            callerID = sectionID;
             options.saveComplete = onSaveComplete;
             options.ele = $("#course-widget-container");
+
+                if ( $("#" + callerID).parent().attr("data-includeparents")  == "1" ) {
+                    $("#doParent").attr('checked','checked');
+                } else {
+                    $("#doParent").removeAttr('checked');
+                }
+
             try { $("#course-widget-btn-save").unbind("click"); } catch (err) { }
             if (sectionID) {
                 getJSON("/api/rest/v1/sections/" + sectionID + "/studentSectionAssociations/students");
             }
         },
-        getJSON = function (endpoint) {
+        selectedStudents, callerID,
+        getJSON = function (endpoint, selectedStudents) {
             $.ajax({
                 type: "GET",
                 dataType: "json",
@@ -23,6 +33,8 @@ var courseWidget = (function () {
             });
         },
         onSuccess = function (e) {
+
+
             var dom = "",
                 fullName,
                 li = $("#course-widget-li").html(),
@@ -31,17 +43,20 @@ var courseWidget = (function () {
                 dom = "<ol>";
                 if (e.length != 0) {
                     $(e).each(function () {
+                        var cls = ""
                         id = this.id;
+                        if (jQuery.inArray(id, selectedStudents) > -1) {
+                            cls = "selected"
+                        }
                         fullName = this.name.lastSurname + ", " + this.name.firstName;
-                        dom += li.replace("[id]", id).replace("[name]", fullName);
+                        dom += li.replace("[id]", id).replace("[name]", fullName).replace("[class]", cls);
                     });
                 }
                 else {
                     dom += "<li>No students found.</li>";
                 }
                 dom += "</ol>";
-                dom += "<input id='course-widget-all-students' type=\"checkbox\" /><span>All Students</span>";
-                dom += "<input id='course-widget-all-students-parents' type=\"checkbox\" /><span>All Parents Of Selected Students</span>";
+                
                 $("#course-widget-body").html(dom);
                 options.bindEvents();
                 options.ele.show();
@@ -51,6 +66,24 @@ var courseWidget = (function () {
         onError = function (e, f, g) {
         },
         onSave = function (e) {
+
+            var totalStudents = 0;
+            var Stu = [];
+            $("#course-widget-body li.selected").each(function() {
+                totalStudents += 1;
+                Stu.push( $(this).attr("id") );
+            })
+            $("#" + callerID).parent().attr("data-csv", Stu.join(","))
+            $("#" + callerID).parent().attr("data-count",  totalStudents);
+
+            if ($("#doParent:checked").size() > 0 ) {
+                $("#" + callerID).parent().attr("data-includeparents",  "1");
+            } else {
+                $("#" + callerID).parent().attr("data-includeparents",  "0");
+            }
+            $("#course-widget-container").modal("hide");
+            getStats()
+            return;
             var students = $(".course-student"),
                 ids = [],
                 checked = false,
