@@ -3,8 +3,9 @@
 <%@ Import Namespace="System.IO" %>
 <%@ Import Namespace="Newtonsoft.Json" %>
 <%
-Dim txt As String = request.querystring("txt")
-'Session("TranslateToken") = ""
+Dim txtToTranslate As String = request.Form("txt")
+Session("TranslateToken") = ""
+
 if Session("TranslateToken") = "" then
 
 		'Prepare OAuth request 
@@ -27,19 +28,13 @@ if Session("TranslateToken") = "" then
 		if responseText <> "" then
 			Dim foo as Newtonsoft.Json.Linq.JObject = Newtonsoft.Json.Linq.JObject.Parse(responseText)
 			Session("TranslateToken") = foo("access_token").toString()
-			'response.write( Session("TranslateToken") )
 		end if
-
 
 end if
 
-'translate
-Dim fromLang As String = "en"
-Dim toLang As String = "de"
-
-'Dim url As String = "http://api.microsofttranslator.com/v2/Http.svc/Translate?appId=Bearer%20" & Session("TranslateToken") &  "&text=" + System.Web.HttpUtility.UrlEncode("Use pixels to express measurements for padding and margins.") + "&from=" + fromLang + "&to=" + toLang + "&contentType=text/plain"
-Dim txtToTranslate As String = "Use pixels to express measurements for padding and margins."
-Dim uri As String = "http://api.microsofttranslator.com/v2/Http.svc/Translate?text=" + System.Web.HttpUtility.UrlEncode(txtToTranslate) + "&from=en&to=es"
+'Dim fromLang As String = "en"
+'Dim toLang As String = "de"
+Dim uri As String = "http://api.microsofttranslator.com/v2/Http.svc/Translate?text=" + System.Web.HttpUtility.UrlEncode(txtToTranslate) + "&from=en&to=" & request.form("lang")
 
 Dim translationWebRequest As System.Net.WebRequest = System.Net.WebRequest.Create(uri)
 translationWebRequest.Headers.Add("Authorization", "Bearer " & Session("TranslateToken"))
@@ -57,7 +52,7 @@ Dim xTranslation As New System.Xml.XmlDocument()
 
 xTranslation.LoadXml(translatedStream.ReadToEnd())
 
-response.write( "Your Translation is: " + xTranslation.InnerText)
+response.write( xTranslation.InnerText)
 
 
 %>
