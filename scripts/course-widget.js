@@ -8,7 +8,7 @@ var courseWidget = (function () {
             options.ele = $("#course-widget-container");
             try { $("#course-widget-btn-save").unbind("click"); } catch (err) { }
             if (sectionID) {
-                getJSON("https://api.sandbox.slcedu.org/api/rest/v1/sections/" + sectionID + "/studentSectionAssociations/students");
+                getJSON("/api/rest/v1/sections/" + sectionID + "/studentSectionAssociations/students");
             }
         },
         getJSON = function (endpoint) {
@@ -16,8 +16,8 @@ var courseWidget = (function () {
                 type: "GET",
                 dataType: "json",
                 cache: false,
-                data: { "endpoint": endpoint },
-                url: "http://localhost:49277/proxy.aspx",
+                data: { "p": endpoint },
+                url: "/proxy.aspx",
                 success: onSuccess,
                 error: onError
             });
@@ -34,14 +34,6 @@ var courseWidget = (function () {
                         id = this.id;
                         fullName = this.name.lastSurname + ", " + this.name.firstName;
                         dom += li.replace("[id]", id).replace("[name]", fullName);
-                        dom += li.replace("[id]", id).replace("[name]", fullName);
-                        dom += li.replace("[id]", id).replace("[name]", fullName);
-                        dom += li.replace("[id]", id).replace("[name]", fullName);
-                        dom += li.replace("[id]", id).replace("[name]", fullName);
-                        dom += li.replace("[id]", id).replace("[name]", fullName);
-                        dom += li.replace("[id]", id).replace("[name]", fullName);
-                        dom += li.replace("[id]", id).replace("[name]", fullName);
-                        dom += li.replace("[id]", id).replace("[name]", fullName);
                     });
                 }
                 else {
@@ -53,6 +45,7 @@ var courseWidget = (function () {
                 $("#course-widget-body").html(dom);
                 options.bindEvents();
                 options.ele.show();
+                $("#course-widget-container").modal("show");
             }
         },
         onError = function (e, f, g) {

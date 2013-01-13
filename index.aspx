@@ -3,7 +3,9 @@
     <link rel="stylesheet" type="text/css" href="/css/bootstrap-wysihtml5.css"></link>
     <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
     <script src="/js/wysihtml5-0.3.0.min.js"></script>
+    
     <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="/scripts/course-widget.js"></script>
     <script src="/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/scripts/select2/select2.js"></script>
     <link href="/scripts/select2/select2.css" rel="stylesheet"/>
@@ -61,12 +63,13 @@
             })
 
             $('i.icon-pencil').live("click",function(){
-                var recipients = $(this).data("recipients");
-                alert($(this).closest('span').text())
-                raiseModal($(this).closest('span').text(), $(this).data("recipients"));
+                courseWidget.load( $(this).attr("id") );
+              
+
             })
 
             function raiseModal(name, recips) {
+
                 $('#myModal .modal-header #myModalLabel').text("Editing " + name); 
                 $('#myModal').modal('show');
             }
@@ -237,6 +240,29 @@ Ms. Kim</textarea>
             </form>
         </div>
     </div>
+
+    <div id="course-widget-container" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="myModalLabel">Modal header</h3>
+        </div>
+        <div id="course-widget-body" class="modal-body">
+            <p>One fine body…</p>
+        </div>
+        <script id="course-widget-li" type="text/html">
+            <li>
+                <input type="checkbox" class="course-student" data-id="[id]" />
+                <span>[name]</span>
+                <input type="checkbox" class="course-parent" data-send="false" />
+                <span>Include Parent</span>
+            </li>
+        </script>
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+            <button id="course-widget-btn-save" class="btn btn-primary">Save changes</button>
+        </div>
+    </div>
+
     <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-header">
             <h3 id="myModalLabel">Modal header</h3>
