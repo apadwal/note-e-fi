@@ -301,6 +301,9 @@
     #badges, #stats {
         min-height: auto !important;
     }
+    #mainarea-wysihtml5-toolbar a.btn {
+        height: 20px !important;
+    }
     </style>
 </head>
 <body style="background:whiteSmoke">
