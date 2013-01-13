@@ -1,8 +1,9 @@
 <%@ Page Language="VB" Explicit="False" %>
 <%
-Session.Abandon()
+	'This only logs you out of the local application. 
+	Session.Abandon()
 %>
 
-<a href="/callback.aspx">Get New Token</a>
+<a href="/login.aspx">Log In Again</a>
 
 
