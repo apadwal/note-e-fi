@@ -3,6 +3,6 @@
 Session.Abandon()
 %>
 
-<a href="/">Get New Token</a>
+<a href="/callback.aspx">Get New Token</a>
 
 
