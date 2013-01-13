@@ -2,7 +2,9 @@
 <head>
     <link rel="stylesheet" type="text/css" href="./css/bootstrap.min.css">
     <script src="http://code.jquery.com/jquery-latest.js"></script>
-    <script src="/js/bootstrap.min.js">
+    <script src="/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/scripts/select2/select2.min.js"></script>
+    <link href="/scripts/select2/select2.css" rel="stylesheet"/>
 
     <script type="text/javascript">
         $(document).ready(function() {
@@ -25,14 +27,28 @@
                         });
                 });
             }
+
+            $("#reciplist").select2({
+              minimumInputLength: 2,
+              width:"resolve",
+              placeholder: "Search for Teacher, Parent, Student, or Class",
+              formatSelection: recipFormatSelection
+            });
         });
+        
+        function recipFormatResults(result) {
+
+
+        }
+
+        function recipFormatSelection(result) {
+              return result.id;
+              $("#badges").append("<span class='label label-success'>Art 2 <i class='icon-pencil icon-white;></i> <i class='icon-trash icon-white'></i></span>");
+        }
     </script>
 </head>
 <body style="background:whiteSmoke">
     <%
-        If Session("Token") = "" then
-            response.redirect("/callback.aspx" )
-        end if
     %>
     <p>
 
@@ -49,8 +65,11 @@
               <div class="control-group">
                 <label class="control-label" for="inputRecipients">Recipients</label>
                 <div class="controls">
-                <div class="input-append span12">
-                    <input class="span8" type="text" id="inputRecipients" placeholder="Email">
+                <div class="span12">
+                    <select class="span6" id="reciplist" multiple="multiple">
+                      <option>hi</option>
+                      <option>low</option>
+                    </select>
                     <button class="btn btn-primary" type="button">More</button>
                 </div>
                   <br>
