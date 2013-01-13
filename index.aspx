@@ -1,8 +1,13 @@
 <html>
 <head>
-    <link rel="stylesheet" type="text/css" href="./css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap-wysihtml5.css"></link>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+    <script src="/js/wysihtml5-0.3.0.min.js"></script>
     <script src="http://code.jquery.com/jquery-latest.js"></script>
+
     <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/bootstrap-wysihtml5.js"></script>
+
 
     <script type="text/javascript">
         $(document).ready(function() {
@@ -85,14 +90,20 @@
               <div class="control-group">
                 <label class="control-label" for="inputBody">Message Body</label>
                 <div class="controls">
-                  <textarea class="span10" name="inputBody" rows="3"></textarea>
+                  <textarea id="mainarea" class="span10" name="inputBody" rows="3"></textarea>
                 </div>
+                <script type="text/javascript">
+                    $('#mainarea').wysihtml5();
+                </script>
               </div>
               <div class="control-group">
                 <div class="controls">
                   <label class="checkbox span4">
                     <input type="checkbox"> Send from my emails (john.doe@gmail.com)
                   </label>
+                  <label class="checkbox span4">
+                    <input type="checkbox"> Translate for non-English families
+                  </label>                  
                   <button type="submit" style="display:block"class="btn btn-success btn-large span2">Send</button>
                 </div>
               </div>
