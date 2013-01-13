@@ -104,7 +104,7 @@
                 $('#myModal').modal('show');
             }
 
-
+            $("#messageTemplate").select2();
             $("#reciplist").select2({
               width:"resolve",
               placeholder: "Search for Teacher, Parent, Student, or Class",
