@@ -19,6 +19,7 @@
 
     var select2JSON = {"results":[],"more":false}; //hold student data for the dropdowns
     var list = {"course": []}; //list of students in the course-widget
+    var templates = ["Your child was absent today from math class today.  Regular attendance at school is an important part of every student's success and is necessary in order to gain the greatest benefit from the educational experience. Students who are frequently absent from school miss direct instruction and regular contact with their teachers. When absences accumulate, it may ultimately result in academic difficulty.<br><br>We have the final exam next week so attendance is very important to be successful on the exam.  Please know that your child is responsible for the work covered today.<br><br>If you have any questions, please call my office at or the guidance office at so that we may work together to ensure your child's educational success.<br><br>Sincerely,<br><BR>Ms. Kim","Your child has been selected to receive tutoring services in the after-school program. Your child was selected by reviewing reading and/or math scores and first-quarter grades as well as teacher recommendation. This is an important opportunity to help your child improve in school. By sending your child to the after-school program you are showing support and helping your child to be a success in the years to come.<br><br>The emphasis of the program will be on reading/math and homework tutoring with enrichment opportunities. Students will receive a snack after school. Then they will report to a first hour academic class. During this time they will have homework assistance and then work on either math or reading lessons to help them improve in that area. After the academic hour, if students have completed their homework they will attend a 40-minute enrichment class. If students have not completed their homework they will be required to attend the homework center.<br><br>If your child has been referred it is very important that they attend the program. Your child’s teacher may offer extra credit in the subject they are attending for. Please fill out the attached permission slip and send it back me as soon as possible. It is very important that if you sign your child up they do not miss any days. After this first session is over, students will be reevaluated to determine if they need to continue services during the second semester. If you have any questions or concerns please do not hesitate to call me.<br><br>Thank You."];
 
     function getStudents() {
         //we are hardcodiing the course ID because only one course has students in the SLC
@@ -69,6 +70,17 @@
 
             //populate
             getStudents()
+
+            $('#messageTemplate').live("change", function() {
+                if ($(this).val() == 0) {
+
+                }
+                else {
+                    var number = $(this).val() - 1;
+                    //$('#mainarea').setValue(templates[number]);
+                    $('iframe').contents().find('.wysihtml5-editor').html(templates[number]);
+                } 
+            })
 
             //bind events
             $("#course-widget-body li").live("click", function() {
@@ -413,18 +425,21 @@
                   <input class="span10" type="text" id="inputSubject" placeholder="Subject">
                 </div>
               </div>
+
+                <div class="control-group">
+                  <label class="control-label" for="messageTemplate">Template</label>
+                  <div class="controls">
+                    <select class="span10" id="messageTemplate">
+                      <option value="0">Select A Template</option>
+                      <option value="1">Attendance Message</option> 
+                      <option value="2">Tutoring</option>                                       
+                    </select>
+                  </div>
+                </div>
               <div class="control-group">
                 <label class="control-label" for="inputBody">Message Body</label>
                 <div class="controls">
                     <textarea id="mainarea" class="span10" name="inputBody" rows="13" style="">
-                        Your child was absent today from math class today.  Regular attendance at school is an important part of every student's success and is necessary in order to gain the greatest benefit from the educational experience. Students who are frequently absent from school miss direct instruction and regular contact with their teachers. When absences accumulate, it may ultimately result in academic difficulty.<br><br>
-
-                        We have the final exam next week so attendance is very important to be successful on the exam.  Please know that your child is responsible for the work covered today.<br><br>
-
-                        If you have any questions, please call my office at or the guidance office at so that we may work together to ensure your child's educational success.<br><br>
-
-                        Sincerely,<br>
-                        Ms. Kim
                     </textarea>
                 </div>
                 <script type="text/javascript">
@@ -445,7 +460,9 @@
                   </label>          
                     <label class="checkbox span4" id="totalLang" style="padding-top: 6px;">
                   </label>
-                  <button onClick='sendFunction()' style="display:block"class="btn btn-success btn-large span2">Send</button>  
+
+                    <button type="submit" style=""class="btn">Save Template</button>
+                  <button onClick="sendFunction()" class="btn btn-success">Send <i class="icon-envelope icon-white"></i></button>  
                 </div>
               </div>
             </form>
