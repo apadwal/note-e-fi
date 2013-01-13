@@ -4,7 +4,7 @@
     <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="/css/crappydesign.css">
     <script src="/js/wysihtml5-0.3.0.min.js"></script>
-    
+    <script src="/js/base64.js"></script>
     <script src="http://code.jquery.com/jquery-latest.js"></script>
     <script src="/scripts/course-widget.js?r=1"></script>
     <script src="/js/bootstrap.min.js"></script>
@@ -15,6 +15,8 @@
     <script src="/js/bootstrap-wysihtml5.js"></script>
 
     <script type="text/javascript">
+
+
 
     var select2JSON = {"results":[],"more":false};
     var list = {"course": []};
@@ -183,24 +185,43 @@
 
         function sendFunction() {
             var subject = $("#inputSubject").val();
+            subject = subject.trim();
+            subject = Base64.encode(escape(subject));
             var body = $("#mainarea").val();
+            body = body.trim();
+            body = Base64.encode(escape(body));            
+            var students = "";
+            var teachers = "";
+            var activeFilters = "Overall Attendance Percentage";
             $("#badges span").each(function() {
-                if ($(this).data("type") == "teacher") {
+                if ($(this).data("type") == "Teachers") {
+                    teachers = teacher + $(this).data("id");
+                } else if ($(this).data("type") == "Courses") {
+                    students = students + $(this).data("csv");
+                } else if ($(this).data("type") == "Students") {
+                    students = students + $(this).data("id");
+                }
 
-                } else if ($(this).data("type") == "course") {
+            });
+            var currentID = "bac78264188155695c8a34f09189b6c637b465ad_id";
+            var dataString = "subject=" + subject + "&body=" + body + "&students=" + students + "&teachers=" + teachers + "&filters=" + activeFilters + "&currentid=" + currentID;
 
-                } else if ($(this).data("type") == "") {
+            $.ajax({
+                type: "POST",
+                url: "/post.aspx",
+                data: dataString,
+                dataType: "text",
+                success: function (resp) {
+                    location.reload();
+                },
+                error: function (x, y, z) {
 
                 }
 
             });
-
-            //var teachers = 
-            //var students = 
-            //var activeFilters = 
-            //var currentID = <%=Session("Token")%>;
-            
         }
+
+            
 
         function SelectAll() {
             $("#course-widget-body li").addClass("selected")
@@ -229,6 +250,13 @@
                     $(this).find("i").attr("class", "")
                 }
             });
+        }
+
+        //Enable browser .trim support for weird/older browsers
+        if (!String.prototype.trim) {
+            String.prototype.trim = function () {
+                return this.replace(/^\s+|\s+$/g, '');
+            }
         }
     </script>
 
@@ -371,12 +399,13 @@
                   <label class="checkbox span4">
                     <input type="checkbox" id="translate"> Translate for non-English families
                   </label>                  
-                  <button onClick('sendFunction()') style="display:block"class="btn btn-success btn-large span2">Send</button>
+                  
                 </div>
               </div>
             </form>
         </div>
     </div>
+    <button onClick='sendFunction()' style="display:block"class="btn btn-success btn-large span2">Send</button>
 	<footer class="footer">
 	  <div class="container">
 		<p>Built by the CaseNEX team</p>
