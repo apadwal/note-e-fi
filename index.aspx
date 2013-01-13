@@ -6,6 +6,7 @@
     <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="/css/crappydesign.css">
     <script src="/js/wysihtml5-0.3.0.min.js"></script>
+    <script src="/js/base64.js"></script>
     <script src="http://code.jquery.com/jquery-latest.js"></script>
     <script src="/scripts/course-widget.js?r=1"></script>
     <script src="/js/bootstrap.min.js"></script>
@@ -192,8 +193,48 @@
             })
             $("#totalLang").empty();
             $("#totalLang").append(a);
-            
         }
+
+
+        function sendFunction() {
+            var subject = $("#inputSubject").val();
+            subject = subject.trim();
+            subject = Base64.encode(escape(subject));
+            var body = $("#mainarea").val();
+            body = body.trim();
+            body = Base64.encode(escape(body));            
+            var students = "";
+            var teachers = "";
+            var activeFilters = "Overall Attendance Percentage";
+            $("#badges span").each(function() {
+                if ($(this).data("type") == "Teachers") {
+                    teachers = teacher + $(this).data("id");
+                } else if ($(this).data("type") == "Courses") {
+                    students = students + $(this).data("csv");
+                } else if ($(this).data("type") == "Students") {
+                    students = students + $(this).data("id");
+                }
+
+            });
+            var currentID = "bac78264188155695c8a34f09189b6c637b465ad_id";
+            var dataString = "subject=" + subject + "&body=" + body + "&students=" + students + "&teachers=" + teachers + "&filters=" + activeFilters + "&currentid=" + currentID;
+
+            $.ajax({
+                type: "POST",
+                url: "/post.aspx",
+                data: dataString,
+                dataType: "text",
+                success: function (resp) {
+                    $("#alertSuccess").show();
+                },
+                error: function (x, y, z) {
+
+                }
+
+            });
+        }
+
+            
 
         function SelectAll() {
             $("#course-widget-body li").addClass("selected")
@@ -223,6 +264,13 @@
                     $(this).find("i").attr("class", "icon-user")
                 }
             });
+        }
+
+        //Enable browser .trim support for weird/older browsers
+        if (!String.prototype.trim) {
+            String.prototype.trim = function () {
+                return this.replace(/^\s+|\s+$/g, '');
+            }
         }
     </script>
 
@@ -329,14 +377,22 @@
 				</ul>
 			</div>
 	</div>
-    <div class="container-fluid" id="overallContainer">		
+
+    <div class="container-fluid" id="overallContainer">
+              <div id="alertSuccess" style="display:none;text-align: center; width:93%" class="alert alert-success span8">
+                <button type="button" class="close" data-dismiss="alert-success">&times;</button>
+                <strong>Success!</strong> Message has been posted
+            </div>		
         <div class="row-fluid">
-            
-            <form class="form-horizontal span12">
-            
+  
+            <form onsubmit="return false;" class="form-horizontal span12">
+
               <div class="control-group">
+
                 <label ></label>
+
                 <div class="controls">
+
                   <h3>Compose a Message</h3>
                 </div>
               </div>
@@ -388,14 +444,14 @@
                     <input type="checkbox" id="translate"> Translate for non-English families
                   </label>          
                     <label class="checkbox span4" id="totalLang" style="padding-top: 6px;">
-                    
                   </label>
-                  <button type="submit" style="display:block"class="btn btn-success btn-large span2">Send</button>
+                  <button onClick='sendFunction()' style="display:block"class="btn btn-success btn-large span2">Send</button>  
                 </div>
               </div>
             </form>
         </div>
     </div>
+    
 	<footer class="footer">
 	  <div class="container">
 		<p>Built by the CaseNEX team</p>
