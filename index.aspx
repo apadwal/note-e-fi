@@ -90,15 +90,15 @@
           $(".select2-choice").html("<span style='color: #999999;!important'>Search for Teacher, Parent, Student, or Class</span>"); 
           var myId = result.id.replace(/[^\w\s]/gi, '');
             if (result.type == "Courses") {
-              if ($("#" + myId).length == 0) {
                 $("#badges").append("<span class='label label-success'>" + result.name + " <i id='" + myId + "' data-type='" + result.type + "' data-id=" + result.id + " data-count='" + result.count + "' class=' icon-pencil icon-white' onClick='win.show('" + result.id + "');></i> <i class='icon-trash icon-white'></i></span> ");
+                return result.email;            
+            } else {
+              if ($("#" + myId).length == 0) {
+                $("#badges").append("<span class='label label-success'>" + result.name + " <i id='" + myId + "' data-type='" + result.type + "' data-id=" + result.id + " class='icon-trash icon-white'></i></span> ");
                 return result.email;
               } else {
                 return result.email;
               };
-            } else {
-              $("#badges").append("<span class='label label-success'>" + result.name + " <i data-type='" + result.type + "' data-id=" + result.id + " class='icon-trash icon-white'></i></span> ");
-              return result.email;
             }
         }
 
