@@ -2,9 +2,16 @@
 <%@ Import Namespace="System.Net" %>
 <%@ Import Namespace="System.IO" %>
 <%@ Import Namespace="Newtonsoft.Json" %>
+<%@ Import Namespace="System.Web.Configuration" %>
 <%
+
+'This queries microsoft translation api
+
 Dim txtToTranslate As String = request.Form("txt")
-Session("TranslateToken") = ""
+Session("TranslateToken") = "" 'force a new session
+
+Dim AzureClientID As String = WebConfigurationManager.AppSettings("AzureClientID")
+Dim AzureSecret As String = WebConfigurationManager.AppSettings("AzureSecret")
 
 if Session("TranslateToken") = "" then
 
@@ -12,7 +19,7 @@ if Session("TranslateToken") = "" then
 		Dim webRequest As WebRequest = WebRequest.Create("https://datamarket.accesscontrol.windows.net/v2/OAuth2-13")
 		webRequest.ContentType = "application/x-www-form-urlencoded"
 		webRequest.Method = "POST"
-		Dim bytes As Byte() = Encoding.ASCII.GetBytes("grant_type=client_credentials&client_id=" & HttpUtility.UrlEncode("SLCTranslate") & "&client_secret=" & HttpUtility.UrlEncode("o72BIo3LHBH12enfHXbW6gQ1GrpjR0zzSqtAR2q4A/0=") & "&scope=http://api.microsofttranslator.com")
+		Dim bytes As Byte() = Encoding.ASCII.GetBytes("grant_type=client_credentials&client_id=" & HttpUtility.UrlEncode(AzureClientID) & "&client_secret=" & HttpUtility.UrlEncode(AzureSecret) & "&scope=http://api.microsofttranslator.com")
 		webRequest.ContentLength = bytes.Length
 		Using outputStream As Stream = webRequest.GetRequestStream()
 			outputStream.Write(bytes, 0, bytes.Length)
@@ -32,8 +39,7 @@ if Session("TranslateToken") = "" then
 
 end if
 
-'Dim fromLang As String = "en"
-'Dim toLang As String = "de"
+
 Dim uri As String = "http://api.microsofttranslator.com/v2/Http.svc/Translate?text=" + System.Web.HttpUtility.UrlEncode(txtToTranslate) + "&from=en&to=" & request.form("lang")
 
 Dim translationWebRequest As System.Net.WebRequest = System.Net.WebRequest.Create(uri)
@@ -52,7 +58,7 @@ Dim xTranslation As New System.Xml.XmlDocument()
 
 xTranslation.LoadXml(translatedStream.ReadToEnd())
 
-response.write( xTranslation.InnerText)
+response.write( xTranslation.InnerText )
 
 
 %>
