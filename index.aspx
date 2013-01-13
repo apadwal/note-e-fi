@@ -225,7 +225,7 @@
                 data: dataString,
                 dataType: "text",
                 success: function (resp) {
-                    location.reload();
+                    $("#alertSuccess").show();
                 },
                 error: function (x, y, z) {
 
@@ -377,14 +377,22 @@
 				</ul>
 			</div>
 	</div>
-    <div class="container-fluid" id="overallContainer">		
+
+    <div class="container-fluid" id="overallContainer">
+              <div id="alertSuccess" style="display:none;text-align: center; width:93%" class="alert alert-success span8">
+                <button type="button" class="close" data-dismiss="alert-success">&times;</button>
+                <strong>Success!</strong> Message has been posted
+            </div>		
         <div class="row-fluid">
-            
-            <form class="form-horizontal span12">
-            
+  
+            <form onsubmit="return false;" class="form-horizontal span12">
+
               <div class="control-group">
+
                 <label ></label>
+
                 <div class="controls">
+
                   <h3>Compose a Message</h3>
                 </div>
               </div>
@@ -436,14 +444,14 @@
                     <input type="checkbox" id="translate"> Translate for non-English families
                   </label>          
                     <label class="checkbox span4" id="totalLang" style="padding-top: 6px;">
-                    
                   </label>
+                  <button onClick='sendFunction()' style="display:block"class="btn btn-success btn-large span2">Send</button>  
                 </div>
               </div>
             </form>
         </div>
     </div>
-    <button onClick='sendFunction()' style="display:block"class="btn btn-success btn-large span2">Send</button>
+    
 	<footer class="footer">
 	  <div class="container">
 		<p>Built by the CaseNEX team</p>
