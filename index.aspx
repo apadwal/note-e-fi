@@ -6,7 +6,7 @@
     <script src="/js/wysihtml5-0.3.0.min.js"></script>
     
     <script src="http://code.jquery.com/jquery-latest.js"></script>
-    <script src="/scripts/course-widget.js"></script>
+    <script src="/scripts/course-widget.js?r=1"></script>
     <script src="/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/scripts/select2/select2.js"></script>
     <link href="/scripts/select2/select2.css" rel="stylesheet"/>
@@ -22,6 +22,10 @@
         var s = {"students":[],"totalespanol": 0};
         /* populate data for select 2 */
         $.getJSON('proxy.aspx?p=/api/rest/v1/sections/962f0a49fc8b8acd90be62aaa0a61c4e89083bbf_id/studentSectionAssociations/students', function(data) {
+            $("li.loggedIn").show()
+            $("li.loggedOut").hide()
+            $("#overallContainer").show()
+
                 $.each(data, function(i) {
                     s.students.push(data[i].id)
                     select2JSON.results.push( {"id": data[i].id, "text": data[i].name.lastSurname + ", " + data[i].name.firstName, "name": data[i].name.lastSurname + ", " + data[i].name.firstName, "type": "Students" , "count":  1, "csv": data[i].id, "totalespanol": (data[i].hispanicLatinoEthnicity) ? 1 : 0  } )
@@ -29,10 +33,16 @@
                         s.totalespanol = s.totalespanol + 1;
                     }
                 });
-        });
+
+                getTheRest(s) 
+
+        }).error(function() { 
+            $("li.loggedIn").hide()
+            $("li.loggedOut").show()
+            $("#overallContainer").hide()
+        })
 
 
-        getTheRest(s) 
     }
 
     function getTheRest(s) {
@@ -54,8 +64,11 @@
     $(document).ready(function() {
 
 
-        getStudents()
-
+            getStudents()
+            $("#course-widget-body li").live("click", function() {
+                $(this).toggleClass("selected");
+                $(this).find("i").toggleClass("icon-white")
+            })
 
             $('i.icon-trash').live("click",function(){
                 $(this).closest('span').remove();
@@ -64,9 +77,7 @@
             })
 
             $('i.icon-pencil').live("click",function(){
-                courseWidget.load( $(this).attr("id") );
-              
-
+                courseWidget.load( $(this).attr("id"), $(this).parent().attr("data-csv") );
             })
 
             function raiseModal(name, recips) {
@@ -116,18 +127,26 @@
 
 
         function getStats() {
+
             var students = 0;
             var teachers = 0;
             var parents = 0;
-            $('span.label').each(function(i,item) {
+            $('#badges span.label').each(function(i,item) {
                 var type = $(this).data('type');
-                if (type == "Students" || type == "Courses") {
-                    students += $(this).data('count');
+                if (type == "Students" ) {
+                    students += 1;
+                }
+                if ( type == "Courses") {
+                    students += (parseInt($(this).attr("data-count"))-1);
+                    if ( $(this).attr("data-includeparents") == "1") {
+                        parents += (parseInt($(this).attr("data-count"))-1);
+                    }
                 }
                 else if (type == "Teachers") {
-                    teachers += $(this).data('count');
+                    teachers += 1;
                 }     
             })
+
             $('#stats').html('Sending To: <span class="badge badge-info">' + students + '</span> Students <span class="badge badge-info">' + teachers + '</span> Teachers <span class="badge badge-info">' + parents + '</span> Parents')
         }
         function showTranslationCounts() {
@@ -140,13 +159,14 @@
                 $("#totalLang").append("No Foreign Lang");
                 return;    
             }
-            var a = $("<a href='#'>Total Spanish: " + totalEsp + "</a>")
+            var a = $("<a title='Show Translation'>Total Spanish: " + totalEsp + "</a>")
             $(a).bind("click", function () {
-                var txt = $("#mainarea").val()
+                var txt = $("#mainarea").val();
+                var inner = $(txt).text();
                 $.ajax({
                     type: "POST",
                     url: "/translate/translate.aspx",
-                    data: "txt=" + txt + "&lang=es",
+                    data: "txt=" + inner + "&lang=es",
                     error: function (xhr, status) {
                         alert("No Translation Found")
                     },
@@ -182,14 +202,42 @@
             
         }
 
+        function SelectAll() {
+            $("#course-widget-body li").addClass("selected")
+            $("#course-widget-body li i").addClass("icon-white")
+        }
+        function SelectNone() {
+            $("#course-widget-body li").removeClass("selected")
+            $("#course-widget-body li i").removeClass("icon-white")
+        }
+        function SelectInvert() {
+            $("#course-widget-body li").toggleClass("selected")
+            $("#course-widget-body li i").toggleClass("icon-white")
+        }
+
+        function Rand() {
+            $("#course-widget-body li").each(function() {
+                var blnToggle = true;
+                if ( Math.random() >= 0.5 ) {
+                    blnToggle = false;
+                }
+                if (blnToggle) {
+                    $(this).attr("class", "selected")
+                    $(this).find("i").attr("class", "icon-white")
+                } else {
+                    $(this).attr("class", "")
+                    $(this).find("i").attr("class", "")
+                }
+            });
+        }
     </script>
 
     <style>
 
     .user-name {
         text-align: left;
-        width: 150px;
         margin-right: 35px;
+        width: 300px;
     }
     .user-type {
         text-align: right;
@@ -200,6 +248,62 @@
         text-align: left;
         width: 200px;
         margin-right: 35px;
+    }
+    #course-widget-body {
+
+    }
+
+    #course-widget-body li.selected  {
+        background-color: #63abf7;
+        background-image: -webkit-linear-gradient(top,#63abf7,#5e99cd);
+        background-image: -moz-linear-gradient(top,#63abf7,#5e99cd);
+        background-image: -ms-linear-gradient(top,#63abf7,#5e99cd);
+        background-image: -o-linear-gradient(top,#63abf7,#5e99cd);
+        background-image: linear-gradient(top,#63abf7,#5e99cd);
+        border: 1px solid #779;
+        color: #fff;
+    }
+    #course-widget-body span {
+        font-size: 10px !important;
+    }
+
+    #course-widget-body ol  {
+        margin: 0;
+    }
+    #course-widget-body li  {
+        float: left;
+        height: 23px;
+        list-style: none outside none;
+        overflow: hidden;
+        padding: 10px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        width: 25%;
+
+        -webkit-border-radius: 6px;
+        -moz-border-radius: 6px;
+        border-radius: 6px;
+        -webkit-box-shadow: 0 1px 0 #aaa;
+        -moz-box-shadow: 0 1px 0 #aaa;
+        box-shadow: 0 1px 0 #aaa;
+        background-color: #f4f4f4;
+        background-image: -webkit-linear-gradient(top,#fff,#f4f4f4);
+        background-image: -moz-linear-gradient(top,#fff,#f4f4f4);
+        background-image: -ms-linear-gradient(top,#fff,#f4f4f4);
+        background-image: -o-linear-gradient(top,#fff,#f4f4f4);
+        background-image: linear-gradient(top,#fff,#f4f4f4);
+        filter: alpha(opacity=100);
+        opacity: 1;
+        border: 1px solid #ddd;
+        margin: 9px;
+        padding: 4px;
+        position: relative;
+        vertical-align: top;
+
+    }
+
+    #badges span {
+        padding: 10px;
     }
     </style>
 </head>
@@ -213,12 +317,13 @@
 				  <li class="active"><a href="#">New Message</a></li> 
 				</ul>
 				<ul class="nav pull-right">
-					 <li><a href="#">Welcome, Linda!</a></li> 
-					 <li><a href="/logout.aspx">Logout</a></li>
+					 <li class="loggedIn"><a href="#">Welcome, Linda!</a></li> 
+					 <li class="loggedIn"><a href="/logout.aspx">Logout</a></li>
+                     <li class="loggedOut"><a href="/callback.aspx">LogIn</a></li>
 				</ul>
 			</div>
 	</div>
-    <div class="container-fluid">		
+    <div class="container-fluid" id="overallContainer">		
         <div class="row-fluid">
             <h3>Compose a Message</h3>
             <form class="form-horizontal span12">
@@ -227,9 +332,9 @@
                 <div class="controls">
                     <input class="span10" type="hidden" id="reciplist" multiple="multiple" />
                   <br>
-                  <div class="span10" id="badges" style="margin-top: 8px">
+                  <div class="span10" id="badges" style="padding: 10px 10px 10px 0px">
                   </div>
-                  <div class="span10" id="stats" style="">
+                  <div class="span10" id="stats" style="margin-left: 0px;">
                   </div>
                 </div>
               </div>
@@ -242,14 +347,14 @@
               <div class="control-group">
                 <label class="control-label" for="inputBody">Message Body</label>
                 <div class="controls">
-                  <textarea id="mainarea" class="span10" name="inputBody" rows="9">Your child was absent today from math class today.  Regular attendance at school is an important part of every student's success and is necessary in order to gain the greatest benefit from the educational experience. Students who are frequently absent from school miss direct instruction and regular contact with their teachers. When absences accumulate, it may ultimately result in academic difficulty.
+                    <textarea id="mainarea" class="span8" name="inputBody" rows="13" style="">Your child was absent today from math class today.  Regular attendance at school is an important part of every student's success and is necessary in order to gain the greatest benefit from the educational experience. Students who are frequently absent from school miss direct instruction and regular contact with their teachers. When absences accumulate, it may ultimately result in academic difficulty.<br><br>
 
-We have the final exam next week so attendance is very important to be successful on the exam.  Please know that your child is responsible for the work covered today.
+                    We have the final exam next week so attendance is very important to be successful on the exam.  Please know that your child is responsible for the work covered today.<br><br>
 
-If you have any questions, please call my office at or the guidance office at so that we may work together to ensure your child's educational success.
+                    If you have any questions, please call my office at or the guidance office at so that we may work together to ensure your child's educational success.<br><br>
 
-Sincerely,
-Ms. Kim</textarea>
+                    Sincerely,<br>
+                    Ms. Kim</textarea>
                 </div>
                 <script type="text/javascript">
                     $('#mainarea').wysihtml5({
@@ -280,38 +385,67 @@ Ms. Kim</textarea>
 	</footer>
     <div id="course-widget-container" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h3 id="myModalLabel">Modal header</h3>
+        
+            <h3 id="myModalLabel">Student Filter</h3>
+            <select style="width: 100%" id="filter" onchange="Rand()">
+                <option value=""></option>
+                <optgroup label="Course Data">
+                    <option value="Absent Today">Absent Today</option>
+                    <option value="Overall Attendance Percentage">Overall Attendance Percentage</option>
+                    <option value="State Assessment Scores">State Assessment Scores</option>
+                    <option value="Benchmark Scores">Benchmark Scores</option>
+                    <option value="Course Grade">Course Grade</option>
+                </optgroup>
+                <optgroup label="My Groups">
+                    <option value="Afterschool Intervention Group">Afterschool Intervention Group</option>
+                    <option value="Reading Group">Reading Group</option>
+                </optgroup>
+                <optgroup label="School Groups">
+                    <option value="">Bowling Team</option>
+                    <option value="">Chess Club</option>
+                    <option value="">Lowest Third</option>
+                    <option value="">College Bound Crew</option>
+                </optgroup>
+                <optgroup label="Flag Indicators">
+                    <option value="">Grade Level</option>
+                    <option value="">Cohort Year</option>
+                    <option value="">Meal Status</option>
+                    <option value="">ELL Status</option>
+                    <option value="">SWD Status</option>
+                </optgroup>
+            </select>
         </div>
         <div id="course-widget-body" class="modal-body">
             <p>One fine body…</p>
         </div>
         <script id="course-widget-li" type="text/html">
-            <li>
-                <input type="checkbox" class="course-student" data-id="[id]" />
-                <span>[name]</span>
-                <input type="checkbox" class="course-parent" data-send="false" />
-                <span>Include Parent</span>
+            <li class="[class]" id="[id]">
+                <label> 
+                    <i class="icon-user" style="margin-top: 2px" />
+                    <span>[name]</span>
+                </label>
             </li>
         </script>
         <div class="modal-footer">
-            <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-            <button id="course-widget-btn-save" class="btn btn-primary">Save changes</button>
+
+            <div style="width: 50%; float: left; text-align: left; ">
+                <label style="" title="Include Parent">
+                    <input type="checkbox" class="course-parent" data-send="false" id="doParent" /> 
+                    Include Parent In Email
+                </label>
+                Select: 
+                    <a href="javascript:void(0)" onclick="SelectAll()" >All</a> |
+                    <a href="javascript:void(0)" onclick="SelectNone()" >None</a> |
+                    <a href="javascript:void(0)" onclick="SelectInvert()" >Invert</a>
+            </div>
+            <div style="width: 50%; float:left">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+                <button id="course-widget-btn-save" class="btn btn-primary">Save changes</button>
+            </div>
+
         </div>
     </div>
 
-    <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-header">
-            <h3 id="myModalLabel">Modal header</h3>
-        </div>
-        <div class="modal-body">
-            <p>One fine body…</p>
-        </div>
-        <div class="modal-footer">
-            <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-            <button class="btn btn-primary">Save changes</button>
-        </div>
-    </div>
     <div id="tranlation" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-header">
             <h3 id="myModalLabel">Translation Preview</h3>
