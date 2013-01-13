@@ -4,21 +4,21 @@
     <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="/css/crappydesign.css">
     <script src="/js/wysihtml5-0.3.0.min.js"></script>
-    
     <script src="http://code.jquery.com/jquery-latest.js"></script>
     <script src="/scripts/course-widget.js?r=1"></script>
     <script src="/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/scripts/select2/select2.js"></script>
     <link href="/scripts/select2/select2.css" rel="stylesheet"/>
-
     <script src="/js/bootstrap.min.js"></script>
     <script src="/js/bootstrap-wysihtml5.js"></script>
 
     <script type="text/javascript">
 
-    var select2JSON = {"results":[],"more":false};
-    var list = {"course": []};
+    var select2JSON = {"results":[],"more":false}; //hold student data for the dropdowns
+    var list = {"course": []}; //list of students in the course-widget
+
     function getStudents() {
+        //we are hardcodiing the course ID because only one course has students in the SLC
         var s = {"students":[],"totalespanol": 0};
         /* populate data for select 2 */
         $.getJSON('proxy.aspx?p=/api/rest/v1/sections/962f0a49fc8b8acd90be62aaa0a61c4e89083bbf_id/studentSectionAssociations/students', function(data) {
@@ -46,6 +46,7 @@
     }
 
     function getTheRest(s) {
+        //now load up classes and teachers in the school
         csv = s.students.join(",")
        $.getJSON('proxy.aspx?p=/api/rest/v1/teachers/bac78264188155695c8a34f09189b6c637b465ad_id/teacherSectionAssociations/sections', function(data) {
                 $.each(data, function(i) {
@@ -63,8 +64,10 @@
 
     $(document).ready(function() {
 
-
+            //populate
             getStudents()
+
+            //bind events
             $("#course-widget-body li").live("click", function() {
                 $(this).toggleClass("selected");
                 $(this).find("i").toggleClass("icon-white")
@@ -103,6 +106,7 @@
         });
         
         function recipFormatResults(result) {
+            //display the results
             var markup = "<table class=''><tr>";
             markup += "<td><div class='user-name'>" + result.name + "</div></td>";
             markup += "<td><div class='user-type'>" + result.type + "</div></td>";
@@ -111,6 +115,7 @@
         }
 
         function recipFormatSelection(result) {
+            //format the selected students
           $(".select2-choice").html("<span style='color: #999999;!important'>Search for Teacher, Parent, Student, or Class</span>"); 
           var myId = result.id.replace(/[^\w\s]/gi, '');
             if (result.type == "Courses") {
@@ -127,7 +132,7 @@
 
 
         function getStats() {
-
+            //update the tally of the students selected to be emailed
             var students = 0;
             var teachers = 0;
             var parents = 0;
@@ -150,6 +155,8 @@
             $('#stats').html('Sending To: <span class="badge badge-info">' + students + '</span> Students <span class="badge badge-info">' + teachers + '</span> Teachers <span class="badge badge-info">' + parents + '</span> Parents')
         }
         function showTranslationCounts() {
+            //update the counts of non english students
+            //since the SLC dataset home lang attr is empty, we are faking it
             var totalEsp = 0; 
             $("#badges > span").each(function() {
                 totalEsp += parseInt($(this).attr("data-espanol"));
@@ -195,6 +202,7 @@
         }
 
         function Rand() {
+            //most data is missing, so lets randomize
             $("#course-widget-body li").each(function() {
                 var blnToggle = true;
                 if ( Math.random() >= 0.5 ) {
