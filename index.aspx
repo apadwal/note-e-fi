@@ -377,9 +377,7 @@
 			<div class="navbar-inner">
 				<a class="brand" href="#">NOTE-e-FI</a>
 				<ul class="nav">
-				  <li><a href="#">Home</a></li>
-				  <li><a href="#">Inbox</a></li>
-				  <li class="active"><a href="#">New Message</a></li> 
+				  <li class="active"><a href="/">New Message</a></li> 
                   <li><a href="logs.aspx">Messaging Logs</a></li>
 				</ul>
 				<ul class="nav pull-right">

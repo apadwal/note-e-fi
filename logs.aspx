@@ -16,32 +16,31 @@
     <link href="/scripts/select2/select2.css" rel="stylesheet"/>
     <script src="/scripts/bootstrap.min.js"></script>
     <script src="/scripts/bootstrap-wysihtml5.js"></script>
-        <style type="text/css">
-    .element {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    <style type="text/css">
+            .element {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
 
-    -webkit-border-radius: 6px;
-    -moz-border-radius: 6px;
-    border-radius: 6px;
-    -webkit-box-shadow: 0 1px 0 #aaa;
-    -moz-box-shadow: 0 1px 0 #aaa;
-    box-shadow: 0 1px 0 #aaa;
-    background-color: #f4f4f4;
-    background-image: -webkit-linear-gradient(top,#fff,#f4f4f4);
-    background-image: -moz-linear-gradient(top,#fff,#f4f4f4);
-    background-image: -ms-linear-gradient(top,#fff,#f4f4f4);
-    background-image: -o-linear-gradient(top,#fff,#f4f4f4);
-    background-image: linear-gradient(top,#fff,#f4f4f4);
-    filter: alpha(opacity=100);
-    opacity: 1;
-    border: 1px solid #ddd;
-    margin-top: 9px;
-    padding: 4px;
-    vertical-align: top;
-
-    }
+                -webkit-border-radius: 6px;
+                -moz-border-radius: 6px;
+                border-radius: 6px;
+                -webkit-box-shadow: 0 1px 0 #aaa;
+                -moz-box-shadow: 0 1px 0 #aaa;
+                box-shadow: 0 1px 0 #aaa;
+                background-color: #f4f4f4;
+                background-image: -webkit-linear-gradient(top,#fff,#f4f4f4);
+                background-image: -moz-linear-gradient(top,#fff,#f4f4f4);
+                background-image: -ms-linear-gradient(top,#fff,#f4f4f4);
+                background-image: -o-linear-gradient(top,#fff,#f4f4f4);
+                background-image: linear-gradient(top,#fff,#f4f4f4);
+                filter: alpha(opacity=100);
+                opacity: 1;
+                border: 1px solid #ddd;
+                margin-top: 9px;
+                padding: 4px;
+                vertical-align: top;
+            }
     </style>
     <script type="text/javascript">
 
@@ -167,10 +166,8 @@ function randomStats() {
 			<div class="navbar-inner">
 				<a class="brand" href="#">NOTE-e-FI</a>
 				<ul class="nav">
-				  <li><a href="#">Home</a></li>
-				  <li><a href="#">Inbox</a></li>
 				  <li><a href="/">New Message</a></li>
-                  <li class="active"><a href="#">Messaging Logs</a></li>
+                  <li class="active"><a href="logs.aspx">Messaging Logs</a></li>
 				</ul>
 				<ul class="nav pull-right">
 					 <li><a href="#">Welcome, Linda!</a></li> 
