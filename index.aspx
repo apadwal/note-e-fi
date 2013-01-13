@@ -159,13 +159,14 @@
                 $("#totalLang").append("No Foreign Lang");
                 return;    
             }
-            var a = $("<a href='#'>Total Spanish: " + totalEsp + "</a>")
+            var a = $("<a title='Show Translation'>Total Spanish: " + totalEsp + "</a>")
             $(a).bind("click", function () {
-                var txt = $("#mainarea").val()
+                var txt = $("#mainarea").val();
+                var inner = $(txt).text();
                 $.ajax({
                     type: "POST",
                     url: "/translate/translate.aspx",
-                    data: "txt=" + txt + "&lang=es",
+                    data: "txt=" + inner + "&lang=es",
                     error: function (xhr, status) {
                         alert("No Translation Found")
                     },
