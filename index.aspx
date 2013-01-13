@@ -105,12 +105,12 @@
               <div class="control-group">
                 <label class="control-label" for="inputRecipients">Recipients</label>
                 <div class="controls">
-                <div class="span12">
-                    <input class="span6" type="hidden" id="reciplist" multiple="multiple" />
+                <div class="span10 div input-append">
+                    <input class="span12" type="hidden" id="reciplist" multiple="multiple" />
                     <button class="btn btn-primary" type="button" id="filters">More</button>
                 </div>
                   <br>
-                  <div class="span12" id="badges" style="margin-top: 8px">
+                  <div class="span10" id="badges" style="margin-top: 8px">
                     <span class="label label-success">Art 2 <i class="icon-pencil icon-white"></i> <i class="icon-trash icon-white"></i></span>
                   </div>
                 </div>
@@ -119,7 +119,6 @@
                 <label class="control-label" for="inputSubject">Subject</label>
                 <div class="controls">
                   <input class="span10" type="text" id="inputSubject" placeholder="Subject">
-                  <input class="span8" type="text" id="inputSubject" placeholder="Subject">
                 </div>
               </div>
               <div class="control-group">
