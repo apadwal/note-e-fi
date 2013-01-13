@@ -114,7 +114,7 @@
             });
 
             $("#reciplist").on("change", function(e) {
-              $(".select2-choice").html("<span style='color: #999999;!important'>Search for Teacher, Parent, Student, or Class</span>");
+              $("#s2id_reciplist .select2-choice").html("<span style='color: #999999;!important'>Search for Teacher, Parent, Student, or Class</span>");
               getStats(); 
             });
 
@@ -131,7 +131,7 @@
 
         function recipFormatSelection(result) {
             //format the selected students
-          $(".select2-choice").html("<span style='color: #999999;!important'>Search for Teacher, Parent, Student, or Class</span>"); 
+          $("#s2id_reciplist .select2-choice").html("<span style='color: #999999;!important'>Search for Teacher, Parent, Student, or Class</span>"); 
           var myId = result.id.replace(/[^\w\s]/gi, '');
             if (result.type == "Courses") {
                 $("#badges").append("<span data-espanol='" + result.totalespanol + "' data-type='" + result.type + "' data-id=" + result.id + " data-count='" + result.count + "' data-csv='" + result.csv + "' class='label label-success'>" + result.name + " <i id='" + myId + "'  class=' icon-pencil icon-white'></i> <i class='icon-trash icon-white'></i></span> ");
@@ -505,7 +505,7 @@
                 </optgroup>
             </select>
         </div>
-        <div id="course-widget-body" class="modal-body">
+        <div id="course-widget-body" class="modal-body" style="height:300px">
             <p>One fine body…</p>
         </div>
         <script id="course-widget-li" type="text/html">
