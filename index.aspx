@@ -53,7 +53,6 @@
 
             $("#reciplist").select2({
               minimumInputLength: 2,
-              multiple:true,
               width:"resolve",
               placeholder: "Search for Teacher, Parent, Student, or Class",
               ajax: {
@@ -70,22 +69,60 @@
               formatResult: recipFormatResults,
               formatSelection: recipFormatSelection
             });
+
+            $("#reciplist").on("change", function(e) {
+              $(".select2-choice").html("<span style='color: #999999;!important'>Search for Teacher, Parent, Student, or Class</span>"); 
+            });
+
         });
         
         function recipFormatResults(result) {
             var markup = "<table class=''><tr>";
             markup += "<td><div class='user-name'>" + result.name + "</div></td>";
-            markup += "<td><div class='user-email'>" + result.email + "</div></td>";
             markup += "<td><div class='user-type'>" + result.type + "</div></td>";
             markup += "</tr></table>";
             return markup;              
         }
 
         function recipFormatSelection(result) {
-              $("#badges").append("<span class='label label-success'>" + result.name + "<i class='icon-pencil icon-white';></i> <i class='icon-trash icon-white'></i></span>");
+          $(".select2-choice").html("<span style='color: #999999;!important'>Search for Teacher, Parent, Student, or Class</span>"); 
+          var myId = result.id.replace(/[^\w\s]/gi, '');
+            if (result.type == "course") {
+              if ($("#" + myId).length == 0) {
+                $("#badges").append("<span class='label label-success'>" + result.name + " <i id='" + myId + "' data-type='" + result.type + "' data-id=" + result.id + " data-count='" + result.count + "' class=' icon-pencil icon-white' onClick='win.show('" + result.id + "');></i> <i class='icon-trash icon-white'></i></span> ");
+                return result.email;
+              } else {
+                return result.email;
+              };
+            } else {
+              $("#badges").append("<span class='label label-success'>" + result.name + " <i data-type='" + result.type + "' data-id=" + result.id + " class='icon-trash icon-white'></i></span> ");
               return result.email;
+            }
         }
+
+
+
+
     </script>
+
+    <style>
+
+    .user-name {
+        text-align: left;
+        width: 150px;
+        margin-right: 35px;
+    }
+    .user-type {
+        text-align: right;
+        width:200px;
+        float:right;
+    }
+    .user-email {
+        text-align: left;
+        width: 200px;
+        margin-right: 35px;
+    }
+    </style>
 </head>
 <body style="background:whiteSmoke">
     <%
@@ -105,10 +142,7 @@
               <div class="control-group">
                 <label class="control-label" for="inputRecipients">Recipients</label>
                 <div class="controls">
-                <div class="span10 div input-append">
-                    <input class="span12" type="hidden" id="reciplist" multiple="multiple" />
-                    <button class="btn btn-primary" type="button" id="filters">More</button>
-                </div>
+                    <input class="span10" type="hidden" id="reciplist" multiple="multiple" />
                   <br>
                   <div class="span10" id="badges" style="margin-top: 8px">
                     <span class="label label-success">Art 2 <i class="icon-pencil icon-white"></i> <i class="icon-trash icon-white"></i></span>
