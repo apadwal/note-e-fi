@@ -294,6 +294,9 @@
     #badges span {
         padding: 10px;
     }
+    #badges, #stats {
+        min-height: auto !important;
+    }
     </style>
 </head>
 <body style="background:whiteSmoke">
@@ -336,20 +339,25 @@
               <div class="control-group">
                 <label class="control-label" for="inputBody">Message Body</label>
                 <div class="controls">
-                    <textarea id="mainarea" class="span8" name="inputBody" rows="13" style="">Your child was absent today from math class today.  Regular attendance at school is an important part of every student's success and is necessary in order to gain the greatest benefit from the educational experience. Students who are frequently absent from school miss direct instruction and regular contact with their teachers. When absences accumulate, it may ultimately result in academic difficulty.<br><br>
+                    <textarea id="mainarea" class="span10" name="inputBody" rows="13" style="">
+                        Your child was absent today from math class today.  Regular attendance at school is an important part of every student's success and is necessary in order to gain the greatest benefit from the educational experience. Students who are frequently absent from school miss direct instruction and regular contact with their teachers. When absences accumulate, it may ultimately result in academic difficulty.<br><br>
 
-                    We have the final exam next week so attendance is very important to be successful on the exam.  Please know that your child is responsible for the work covered today.<br><br>
+                        We have the final exam next week so attendance is very important to be successful on the exam.  Please know that your child is responsible for the work covered today.<br><br>
 
-                    If you have any questions, please call my office at or the guidance office at so that we may work together to ensure your child's educational success.<br><br>
+                        If you have any questions, please call my office at or the guidance office at so that we may work together to ensure your child's educational success.<br><br>
 
-                    Sincerely,<br>
-                    Ms. Kim</textarea>
+                        Sincerely,<br>
+                        Ms. Kim
+                    </textarea>
                 </div>
                 <script type="text/javascript">
+                
                     $('#mainarea').wysihtml5({
                         "link": false, //Button to insert a link. Default true
-                        "image": false, //Button to insert an image. Default true,
+                        "image": false //Button to insert an image. Default true
                     });
+                
+                    
                 </script>
               </div>
               <div class="control-group">
