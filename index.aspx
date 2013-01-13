@@ -1,3 +1,5 @@
+<%@ Page Language="VB" Explicit="False" %>
+<!-- #include virtual ="/CheckSessionToken.aspx" -->
 <html>
 <head>
     <link rel="stylesheet" type="text/css" href="/css/bootstrap-wysihtml5.css"></link>
