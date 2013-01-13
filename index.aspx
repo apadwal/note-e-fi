@@ -5,15 +5,15 @@
     <link rel="stylesheet" type="text/css" href="/css/bootstrap-wysihtml5.css"></link>
     <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="/css/crappydesign.css">
-    <script src="/js/wysihtml5-0.3.0.min.js"></script>
-    <script src="/js/base64.js"></script>
+    <script src="/scripts/wysihtml5-0.3.0.min.js"></script>
+    <script src="/scripts/base64.js"></script>
     <script src="http://code.jquery.com/jquery-latest.js"></script>
     <script src="/scripts/course-widget.js?r=1"></script>
-    <script src="/js/bootstrap.min.js"></script>
+    <script src="/scripts/bootstrap.min.js"></script>
     <script type="text/javascript" src="/scripts/select2/select2.js"></script>
     <link href="/scripts/select2/select2.css" rel="stylesheet"/>
-    <script src="/js/bootstrap.min.js"></script>
-    <script src="/js/bootstrap-wysihtml5.js"></script>
+    <script src="/scripts/bootstrap.min.js"></script>
+    <script src="/scripts/bootstrap-wysihtml5.js"></script>
 
     <script type="text/javascript">
 
