@@ -158,6 +158,27 @@
             })
             $("#totalLang").empty();
             $("#totalLang").append(a);
+        }
+
+
+        function sendFunction() {
+            var subject = $("#inputSubject").val();
+            var body = $("#mainarea").val();
+            $("#badges span").each(function() {
+                if ($(this).data("type") == "teacher") {
+
+                } else if ($(this).data("type") == "course") {
+
+                } else if ($(this).data("type") == "") {
+
+                }
+
+            });
+
+            //var teachers = 
+            //var students = 
+            //var activeFilters = 
+            //var currentID = <%=Session("Token")%>;
             
         }
 
@@ -245,7 +266,7 @@ Ms. Kim</textarea>
                   <label class="checkbox span4">
                     <input type="checkbox" id="translate"> Translate for non-English families
                   </label>                  
-                  <button type="submit" style="display:block"class="btn btn-success btn-large span2">Send</button>
+                  <button onClick('sendFunction()') style="display:block"class="btn btn-success btn-large span2">Send</button>
                 </div>
               </div>
             </form>
