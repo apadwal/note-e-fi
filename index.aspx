@@ -132,6 +132,11 @@
 
 
         function getStats() {
+
+            if ( $("#badges span").size() == 0 ) {
+                $("#stats").html("");
+                return;
+            }
             //update the tally of the students selected to be emailed
             var students = 0;
             var teachers = 0;
@@ -291,6 +296,7 @@
 
     #badges span {
         padding: 10px;
+        margin: 10px 10px 10px 0px;
     }
     #badges, #stats {
         min-height: auto !important;
@@ -322,7 +328,7 @@
                 <div class="controls">
                     <input class="span10" type="hidden" id="reciplist" multiple="multiple" />
                   <br>
-                  <div class="span10" id="badges" style="padding: 10px 10px 10px 0px">
+                  <div class="span10" id="badges" style="">
                   </div>
                   <div class="span10" id="stats" style="margin-left: 0px;">
                   </div>
